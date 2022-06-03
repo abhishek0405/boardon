@@ -21,6 +21,7 @@
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
     "express-openid-connect": "^2.7.2",
+    "generate-password": "^1.7.0",
     "jsonwebtoken": "^8.5.1",
     "nodemailer": "^6.7.5"
   }

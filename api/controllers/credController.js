@@ -1,4 +1,5 @@
 const nodemailer = require("nodemailer");
+const generator = require("generate-password");
 const transporter = nodemailer.createTransport({
   service: "gmail",
 
@@ -13,10 +14,16 @@ const generateCredentials = (req, res) => {
   const firstName = req.body.firstname;
   const lastName = req.body.lastname;
   const newEmail = firstName + "." + lastName + "@" + company + ".com";
+  const password = generator.generate({
+    length: 10,
+    numbers: true,
+    uppercase: true,
+  });
+  //Do validations to ensure no field NULL
   const body = `Congratulations ${firstName} ${lastName} on getting an offer at ${company}.
-                Here are your credentials to log in to boardonn :
+                Here are your credentials to log in to boardon :
                 Email : ${newEmail}
-                Password: password`;
+                Password: ${password}`;
 
   console.log(body);
   const mailOptions = {
