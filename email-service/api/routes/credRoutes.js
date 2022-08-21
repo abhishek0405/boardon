@@ -1,11 +1,14 @@
 const express = require("express");
 const router = express.Router();
+const config = require("../../config")[process.env.NODE_ENV || "development"];
+const log = config.log();
+const {
+  generateCredentials,
+  generateCredentialsFromExcel,
+} = require("../controllers/credController");
 
-module.exports = (log) => {
-  const { credServices } = require("../controllers/credController")(log);
+router.post("/generate", generateCredentials);
 
-  router.post("/generate", credServices.generateCredentials);
+router.post("/generateFromSheet", generateCredentialsFromExcel);
 
-  router.post("/generateFromSheet", credServices.generateCredentialsFromExcel);
-  return router;
-};
+module.exports = router;

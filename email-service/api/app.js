@@ -1,13 +1,12 @@
 const express = require("express");
 const app = express();
+const config = require("../config")[process.env.NODE_ENV || "development"];
+const log = config.log();
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+require("dotenv").config();
 
-module.exports = (config) => {
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
-  require("dotenv").config();
-  const log = config.log();
-  const credRoutes = require("./routes/credRoutes")(log);
-  app.use("/cred", credRoutes);
+const credRoutes = require("./routes/credRoutes");
+app.use("/cred", credRoutes);
 
-  return app;
-};
+module.exports = app;
