@@ -1,8 +1,7 @@
 const nodemailer = require("nodemailer");
 const generator = require("generate-password");
-const readxlsxFile = require("read-excel-file/node");
 const excelToJson = require("convert-excel-to-json");
-const XLSX = require("xlsx");
+
 const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 
@@ -110,8 +109,9 @@ mailCredentails = (employee) => {
 };
 
 generateCredentialsFromExcel = (req, res) => {
+  const filePath = req.file.path;
   const result = excelToJson({
-    sourceFile: "BoardonSheetTest.xlsx",
+    sourceFile: filePath,
     header: {
       rows: 1,
     },
@@ -129,11 +129,12 @@ generateCredentialsFromExcel = (req, res) => {
         ...rest,
       })
     );
-    log.info(updatedEmployeeList);
+
+    log.info("Employee List ", updatedEmployeeList);
     responseList = [];
     for (employee of updatedEmployeeList) {
       var response = mailCredentails(employee);
-      console.log(response);
+      log.info(response);
       responseList.push(response);
     }
 
