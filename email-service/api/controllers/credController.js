@@ -5,6 +5,8 @@ const excelToJson = require("convert-excel-to-json");
 const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 
+const Employee = require("../models/employee");
+
 const transporter = nodemailer.createTransport({
   service: "gmail",
 
@@ -91,7 +93,6 @@ mailCredentails = (employee) => {
                     Email : ${newEmail}
                     Password: ${password}`;
 
-  log.info(body);
   const mailOptions = {
     from: process.env.EMAIL,
     to: receiver,
@@ -99,13 +100,33 @@ mailCredentails = (employee) => {
     text: body,
   };
 
-  //Check if good to do like this,
-  try {
-    transporter.sendMail(mailOptions);
-    return { message: "Sent successfully" };
-  } catch (error) {
-    return { message: error };
-  }
+  //try to save, if works , send mail
+  const employeeObj = {
+    //change the Ids,maybe random generate
+    cid: 1,
+    eid: 1,
+    name: firstName + " " + lastName,
+    dob: "02/11/2001",
+    username: newEmail,
+    //hash later
+    password: password,
+  };
+
+  const employeeEntity = new Employee(employeeObj);
+
+  employeeEntity
+    .save()
+    .then((newEmployee) => {
+      log.info(`Employee ${newEmployee._id} Account Created`);
+      transporter.sendMail(mailOptions);
+      return { message: "Sent successfully" };
+    })
+    .catch((err) => {
+      log.err(err);
+      res.json({
+        message: err,
+      });
+    });
 };
 
 generateCredentialsFromExcel = (req, res) => {
@@ -129,12 +150,9 @@ generateCredentialsFromExcel = (req, res) => {
         ...rest,
       })
     );
-
-    log.info("Employee List ", updatedEmployeeList);
     responseList = [];
     for (employee of updatedEmployeeList) {
       var response = mailCredentails(employee);
-      log.info(response);
       responseList.push(response);
     }
 
