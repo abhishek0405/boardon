@@ -1,11 +1,16 @@
 const nodemailer = require("nodemailer");
 const generator = require("generate-password");
 const excelToJson = require("convert-excel-to-json");
-
 const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
-
+const emailValidator = require("deep-email-validator");
 const Employee = require("../models/employee");
+const {
+  LogContext,
+} = require("twilio/lib/rest/serverless/v1/service/environment/log");
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = require("twilio")(accountSid, authToken);
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -15,6 +20,10 @@ const transporter = nodemailer.createTransport({
     pass: process.env.PASSWORD,
   },
 });
+
+async function isEmailValid(email) {
+  return emailValidator.validate(email);
+}
 
 generateCredentials = async (req, res) => {
   const receiver = req.body.email;
@@ -39,12 +48,11 @@ generateCredentials = async (req, res) => {
     uppercase: true,
   });
   //Do validations to ensure no field NULL
+
   const body = `Congratulations ${firstName} ${lastName} on getting an offer at ${company}.
                   Here are your credentials to log in to boardon :
                   Email : ${newEmail}
                   Password: ${password}`;
-
-  log.info(body);
   const mailOptions = {
     from: process.env.EMAIL,
     to: receiver,
@@ -65,11 +73,12 @@ generateCredentials = async (req, res) => {
   });
 };
 
-mailCredentails = (employee) => {
+sendCredentailsToUser = async (employee) => {
   const receiver = employee.email;
   const company = employee.company;
   const firstName = employee.firstname;
   const lastName = employee.lastname;
+  const phone = employee.Phone;
   const newEmail = firstName + "." + lastName + "@" + company + ".com";
 
   if (
@@ -89,9 +98,9 @@ mailCredentails = (employee) => {
   });
 
   const body = `Congratulations ${firstName} ${lastName} on getting an offer at ${company}.
-                    Here are your credentials to log in to boardon :
-                    Email : ${newEmail}
-                    Password: ${password}`;
+                Here are your credentials to log in to boardon :
+                  Email : ${newEmail}
+                  Password: ${password}`;
 
   const mailOptions = {
     from: process.env.EMAIL,
@@ -113,19 +122,43 @@ mailCredentails = (employee) => {
   };
 
   const employeeEntity = new Employee(employeeObj);
+  const { valid, reason, validators } = await isEmailValid(receiver);
+  //ISP blocks connections to port 25
+  if (valid || validators[reason].reason == "Timeout") {
+    employeeEntity
+      .save()
+      .then((newEmployee) => {
+        log.info(`Employee ${newEmployee._id} Account Created`);
+        transporter.sendMail(mailOptions).then((obj) => {
+          log.info(`Mail sent to ${receiver}`);
+        });
 
-  employeeEntity
-    .save()
-    .then((newEmployee) => {
-      log.info(`Employee ${newEmployee._id} Account Created`);
-      transporter.sendMail(mailOptions);
-      return { message: "Sent successfully" };
+        return { message: "Sent successfully" };
+      })
+      .catch((err) => {
+        log.error(err);
+      });
+  } else {
+    log.info("Invalid Email");
+    log.info(validators[reason]);
+    log.info(validators[reason].reason);
+  }
+
+  //send message
+
+  const sender = process.env.TWILIO_SENDER_NUMBER;
+  const receiverNo = "+" + phone;
+  client.messages
+    .create({
+      body: body,
+      from: sender,
+      to: receiverNo,
+    })
+    .then((message) => {
+      log.info(`Message sent to ${receiverNo}`);
     })
     .catch((err) => {
-      log.err(err);
-      res.json({
-        message: err,
-      });
+      log.info(err);
     });
 };
 
@@ -142,17 +175,25 @@ generateCredentialsFromExcel = (req, res) => {
     const employeeList = result[sheetName];
 
     const updatedEmployeeList = employeeList.map(
-      ({ A: firstname, B: lastname, C: email, D: company, ...rest }) => ({
+      ({
+        A: firstname,
+        B: lastname,
+        C: email,
+        D: company,
+        E: Phone,
+        ...rest
+      }) => ({
         firstname,
         lastname,
         email,
         company,
+        Phone,
         ...rest,
       })
     );
     responseList = [];
     for (employee of updatedEmployeeList) {
-      var response = mailCredentails(employee);
+      var response = sendCredentailsToUser(employee);
       responseList.push(response);
     }
 
