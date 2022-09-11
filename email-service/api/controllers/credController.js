@@ -5,6 +5,7 @@ const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 const emailValidator = require("deep-email-validator");
 const Employee = require("../models/employee");
+const QRCode = require("qrcode");
 const {
   LogContext,
 } = require("twilio/lib/rest/serverless/v1/service/environment/log");
@@ -102,12 +103,8 @@ sendCredentailsToUser = async (employee) => {
                   Email : ${newEmail}
                   Password: ${password}`;
 
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: receiver,
-    subject: "Boardon Credentials",
-    text: body,
-  };
+  const credentialsBody = `Email : ${newEmail},
+                           Password :${password} `;
 
   //try to save, if works , send mail
   const employeeObj = {
@@ -129,37 +126,57 @@ sendCredentailsToUser = async (employee) => {
       .save()
       .then((newEmployee) => {
         log.info(`Employee ${newEmployee._id} Account Created`);
-        transporter.sendMail(mailOptions).then((obj) => {
-          log.info(`Mail sent to ${receiver}`);
-        });
+        QRCode.toDataURL(credentialsBody).then((imgUrl) => {
+          const mailOptions = {
+            from: process.env.EMAIL,
+            to: receiver,
+            subject: "Boardon Credentials",
+            attachDataUrls: true,
+            html: `<p>Congratulations <b>${firstName} ${lastName}</b> on getting an offer at 
+            <b>${company}</b>. Below are the credentials to login to the BoardOn Portal, scan the QR Code
+            to read the same.</p>
+          
+            <p><img src=${imgUrl}></p>
+            <p></p>
+            <h3>
+            Regards
+            <p></p>
+            BoardOn Team
+            </h3>`,
+          };
 
-        return { message: "Sent successfully" };
+          transporter.sendMail(mailOptions).then((obj) => {
+            log.info(`Mail sent to ${receiver}`);
+          });
+
+          return { message: "Sent successfully" };
+        });
       })
       .catch((err) => {
         log.error(err);
       });
   } else {
-    log.info("Invalid Email");
+    log.info(`Invalid email ${receiver}`);
     log.info(validators[reason]);
     log.info(validators[reason].reason);
   }
 
   //send message
 
-  const sender = process.env.TWILIO_SENDER_NUMBER;
-  const receiverNo = "+" + phone;
-  client.messages
-    .create({
-      body: body,
-      from: sender,
-      to: receiverNo,
-    })
-    .then((message) => {
-      log.info(`Message sent to ${receiverNo}`);
-    })
-    .catch((err) => {
-      log.info(err);
-    });
+  // const sender = process.env.TWILIO_SENDER_NUMBER;
+  // const receiverNo = "+" + phone;
+  // client.messages
+  //   .create({
+  //     body: body,
+  //     from: sender,
+  //     to: receiverNo,
+  //   })
+  //   .then((message) => {
+  //     log.info(`Message sent to ${receiverNo}`);
+  //   })
+  //   .catch((err) => {
+  //     log.info(err);
+  //   });
 };
 
 generateCredentialsFromExcel = (req, res) => {
