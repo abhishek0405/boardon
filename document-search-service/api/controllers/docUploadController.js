@@ -9,7 +9,7 @@ const client = new Client({
 });
 const uploadDocumentation = async (req, res) => {
   log.info("Uploading Documentation");
-  const documentObj = { ...req.body, date: new Date() };
+  const documentObj = { ...req.body, date: new Date(), companyID: "1" };
   log.info(documentObj);
   await client.index({
     index: "documents",
