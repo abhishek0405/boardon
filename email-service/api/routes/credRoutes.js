@@ -4,7 +4,6 @@ const multer = require("multer");
 const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 const {
-  generateCredentials,
   generateCredentialsFromExcel,
 } = require("../controllers/credController");
 
@@ -39,8 +38,6 @@ function validate(req, res, next) {
   }
   next();
 }
-
-router.post("/generate", generateCredentials);
 
 router.post(
   "/generateFromSheet",
