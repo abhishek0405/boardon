@@ -6,7 +6,7 @@ const EmployeeSchema = mongoose.Schema({
     type: Number,
   },
   eid: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
   },
   name: {
     type: String,
@@ -14,6 +14,14 @@ const EmployeeSchema = mongoose.Schema({
   dob: {
     type: String,
   },
+  phone: {
+    type: String,
+  },
+  //the email user provides
+  email: {
+    type: String,
+  },
+  //the email system generates
   username: {
     type: String,
   },
