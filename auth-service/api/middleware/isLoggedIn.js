@@ -6,6 +6,7 @@ module.exports = (req, resp, next) => {
     req.userData = decoded; //created new field use thhis to check if admin or Not.
     next();
   } catch (error) {
-    return resp.status(401).json("Not authenticated");
+    console.log(error);
+    return resp.json({ Authenticated: false });
   }
 };
