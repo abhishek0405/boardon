@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/abhishek0405/boardon#readme",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "body-parser": "^1.20.0",
     "bunyan": "^1.8.15",
     "convert-excel-to-json": "^1.7.0",
@@ -27,6 +28,7 @@
     "express-openid-connect": "^2.7.2",
     "generate-password": "^1.7.0",
     "jsonwebtoken": "^8.5.1",
+    "mongoose": "^6.6.1",
     "multer": "^1.4.5-lts.1",
     "nodemailer": "^6.7.5",
     "qrcode": "^1.5.1",

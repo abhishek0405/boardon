@@ -3,16 +3,14 @@ const generator = require("generate-password");
 const excelToJson = require("convert-excel-to-json");
 const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
+const bcrypt = require("bcrypt");
 const emailValidator = require("deep-email-validator");
 const Employee = require("../models/employee");
 const QRCode = require("qrcode");
-const {
-  LogContext,
-} = require("twilio/lib/rest/serverless/v1/service/environment/log");
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = require("twilio")(accountSid, authToken);
-
+const mongoose = require("mongoose");
 const transporter = nodemailer.createTransport({
   service: "gmail",
 
@@ -26,54 +24,6 @@ async function isEmailValid(email) {
   return emailValidator.validate(email);
 }
 
-generateCredentials = async (req, res) => {
-  const receiver = req.body.email;
-  const company = req.body.company;
-  const firstName = req.body.firstname;
-  const lastName = req.body.lastname;
-  const newEmail = firstName + "." + lastName + "@" + company + ".com";
-
-  if (
-    receiver == null ||
-    company == null ||
-    firstName == null ||
-    lastName == null
-  ) {
-    res.status(400).json({
-      message: "Invalid request, one or more entries is null",
-    });
-  }
-  const password = generator.generate({
-    length: 10,
-    numbers: true,
-    uppercase: true,
-  });
-  //Do validations to ensure no field NULL
-
-  const body = `Congratulations ${firstName} ${lastName} on getting an offer at ${company}.
-                  Here are your credentials to log in to boardon :
-                  Email : ${newEmail}
-                  Password: ${password}`;
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: receiver,
-    subject: "Boardon Credentials",
-    text: body,
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      res.status(500).json({
-        message: error,
-      });
-    } else {
-      res.status(201).json({
-        message: info,
-      });
-    }
-  });
-};
-
 sendCredentailsToUser = async (employee) => {
   const receiver = employee.email;
   const company = employee.company;
@@ -86,7 +36,8 @@ sendCredentailsToUser = async (employee) => {
     receiver == null ||
     company == null ||
     firstName == null ||
-    lastName == null
+    lastName == null ||
+    phone == null
   ) {
     return {
       message: "Invalid request, one or more entries is null",
@@ -106,77 +57,102 @@ sendCredentailsToUser = async (employee) => {
   const credentialsBody = `Email : ${newEmail},
                            Password :${password} `;
 
-  //try to save, if works , send mail
-  const employeeObj = {
-    //change the Ids,maybe random generate
-    cid: 1,
-    eid: 1,
-    name: firstName + " " + lastName,
-    dob: "02/11/2001",
-    username: newEmail,
-    //hash later
-    password: password,
-  };
+  Employee.find({ email: receiver })
+    .exec()
+    .then(async (foundUsers) => {
+      if (foundUsers.length == 0) {
+        Employee.find({ phone: phone })
+          .exec()
+          .then(async (foundUsers2) => {
+            if (foundUsers2.length == 0) {
+              const eid = new mongoose.Types.ObjectId();
+              const hashedPassword = await bcrypt.hash(password, 10);
+              const employeeObj = {
+                //change the Ids,maybe random generate
+                cid: 1,
+                eid: eid,
+                name: firstName + " " + lastName,
+                dob: "02/11/2001",
+                phone: phone,
+                email: receiver,
+                username: newEmail,
+                //hash later
+                password: hashedPassword,
+              };
+              const employeeEntity = new Employee(employeeObj);
+              const { valid, reason, validators } = await isEmailValid(
+                receiver
+              );
+              //ISP blocks connections to port 25
+              if (valid || validators[reason].reason == "Timeout") {
+                employeeEntity
+                  .save()
+                  .then((newEmployee) => {
+                    log.info(`Employee ${newEmployee.eid} Account Created`);
+                    QRCode.toDataURL(credentialsBody).then((imgUrl) => {
+                      const mailOptions = {
+                        from: process.env.EMAIL,
+                        to: receiver,
+                        subject: "Boardon Credentials",
+                        attachDataUrls: true,
+                        html: `<p>Congratulations <b>${firstName} ${lastName}</b> on getting an offer at
+                    <b>${company}</b>. Below are the credentials to login to the BoardOn Portal, scan the QR Code
+                    to read the same.</p>
 
-  const employeeEntity = new Employee(employeeObj);
-  const { valid, reason, validators } = await isEmailValid(receiver);
-  //ISP blocks connections to port 25
-  if (valid || validators[reason].reason == "Timeout") {
-    employeeEntity
-      .save()
-      .then((newEmployee) => {
-        log.info(`Employee ${newEmployee._id} Account Created`);
-        QRCode.toDataURL(credentialsBody).then((imgUrl) => {
-          const mailOptions = {
-            from: process.env.EMAIL,
-            to: receiver,
-            subject: "Boardon Credentials",
-            attachDataUrls: true,
-            html: `<p>Congratulations <b>${firstName} ${lastName}</b> on getting an offer at 
-            <b>${company}</b>. Below are the credentials to login to the BoardOn Portal, scan the QR Code
-            to read the same.</p>
-          
-            <p><img src=${imgUrl}></p>
-            <p></p>
-            <h3>
-            Regards
-            <p></p>
-            BoardOn Team
-            </h3>`,
-          };
+                    <p><img src=${imgUrl}></p>
+                    <p></p>
+                    <h3>
+                    Regards
+                    <p></p>
+                    BoardOn Team
+                    </h3>`,
+                      };
 
-          transporter.sendMail(mailOptions).then((obj) => {
-            log.info(`Mail sent to ${receiver}`);
+                      transporter.sendMail(mailOptions).then((obj) => {
+                        log.info(`Mail sent to ${receiver}`);
+                      });
+
+                      return { message: "Sent successfully" };
+                    });
+                  })
+                  .catch((err) => {
+                    log.error(err);
+                  });
+              } else {
+                log.info(`Invalid email ${receiver}`);
+                log.info(validators[reason]);
+                log.info(validators[reason].reason);
+              }
+
+              // send message
+
+              // const sender = process.env.TWILIO_SENDER_NUMBER;
+              // const receiverNo = "+" + phone;
+              // client.messages
+              //   .create({
+              //     body: body,
+              //     from: sender,
+              //     to: receiverNo,
+              //   })
+              //   .then((message) => {
+              //     log.info(`Message sent to ${receiverNo}`);
+              //   })
+              //   .catch((err) => {
+              //     log.info(err);
+              //   });
+            } else {
+              log.info(`User with phone number ${phone} already registered`);
+              return;
+            }
           });
-
-          return { message: "Sent successfully" };
-        });
-      })
-      .catch((err) => {
-        log.error(err);
-      });
-  } else {
-    log.info(`Invalid email ${receiver}`);
-    log.info(validators[reason]);
-    log.info(validators[reason].reason);
-  }
-
-  //send message
-
-  // const sender = process.env.TWILIO_SENDER_NUMBER;
-  // const receiverNo = "+" + phone;
-  // client.messages
-  //   .create({
-  //     body: body,
-  //     from: sender,
-  //     to: receiverNo,
-  //   })
-  //   .then((message) => {
-  //     log.info(`Message sent to ${receiverNo}`);
-  //   })
-  //   .catch((err) => {
-  //     log.info(err);
-  //   });
+      } else {
+        log.info(`User with email ${receiver} already registered`);
+        return;
+      }
+    })
+    .catch((err) => {
+      log.info(err);
+    });
 };
 
 generateCredentialsFromExcel = (req, res) => {
@@ -219,6 +195,5 @@ generateCredentialsFromExcel = (req, res) => {
 };
 
 module.exports = {
-  generateCredentials,
   generateCredentialsFromExcel,
 };
