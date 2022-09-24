@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <h2>Questions:</h2>
+        <!-- Trigger the modal with a button -->
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Add question</button>
+      
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create a poll</h4>
+              </div>
+              <div class="modal-body">
+                <form action="/hr/addQuestion" method="post">
+                    <input type="text" name="cid" value="<%- currCompany %>" hidden />
+                    <input type="text" name="pollId" value="<%- currPoll %>" hidden />
+                    <input type="text" name="question" id="question" placeholder="enter question"/><br>
+                    <input type="text" name="option1" id="option1" placeholder="enter option or NA" /><br>
+                    <input type="text" name="option2" id="option2" placeholder="enter option or NA" /><br>
+                    <input type="text" name="option3" id="option3" placeholder="enter option or NA" /><br>
+                    <input type="text" name="option4" id="option4" placeholder="enter option or NA" /><br>
+
+                    <input type="submit" value="Add question" />
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+        <br><br><br>
+        <% for(var i = 0; i < arr.length; i++){ %>
+
+            <%= arr[i].qs %> : <%= arr[i].opt %>
+            <br><br>
+
+
+        <% } %>
+
+        <br><br>
+        <form action="/hr/postPoll" method="post">
+            <input type="text" name="submit" value="submit" hidden />
+            <input type="text" name="cid" value="<%- currCompany %>" hidden />
+            <input type="text" name="pollId" value="<%- currPoll %>" hidden />
+            <input type="submit" name="create" id="create" value="Publish poll"/>
+        </form>
+</body>
+</html>
