@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js">
+</script>
+</head>
+<body>
+    <% for(var i = 0; i < allPolls.length; i++){ %>
+        <h4><%= allPolls[i].pollId %></h4>
+        <br>
+        <% for(var j = 0; j < allPolls[i].responses.length; j++){ %>
+
+<%= allPolls[i].responses[j].username %> : <%= allPolls[i].responses[j].answers %>
+<br><br>
+            <% } %>
+
+
+
+    <% } %>
+
+
+    <h2>Charts here: </h2>
+    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+
+
+    <script>
+        var xValues = <%-JSON.stringify(xvals)%>;
+var yValues = <%-JSON.stringify(yvals)%>;
+var barColors = [
+  "#b91d47",
+  "#00aba9",
+  "#2b5797",
+  "#e8c3b9",
+  "#1e7145"
+];
+
+new Chart("myChart", {
+  type: "pie",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    title: {
+      display: true,
+      text: "World Wide Wine Production 2018"
+    }
+  }
+});
+    </script>
+</body>
+</html>
