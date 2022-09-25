@@ -8,6 +8,7 @@ const client = new Client({
   node: esUrl,
 });
 const searchDocumentationController = async (req, res) => {
+  const companyID = req.userData.cid;
   const searchQuery = req.query.searchQuery;
   log.info("Search query is ", searchQuery);
   const result = await client.search({
@@ -25,7 +26,7 @@ const searchDocumentationController = async (req, res) => {
         ],
         filter: {
           term: {
-            companyID: "1",
+            companyID: companyID,
           },
         },
       },

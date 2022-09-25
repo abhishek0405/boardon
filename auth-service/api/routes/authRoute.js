@@ -12,7 +12,7 @@ router.post("/user/login", userLoginController);
 
 //internal api call
 router.get("/user/isLoggedIn", isLoggedIn, (req, res) => {
-  res.json({ Authenticated: true });
+  res.json({ ...req.userData, Authenticated: true });
 });
 
 router.get("/user/secretRoute", isLoggedIn, secretRouteController);

@@ -14,6 +14,8 @@ const isLoggedIn = async (req, res, next) => {
 
     const authStatus = response.data.Authenticated;
     if (authStatus === true) {
+      //fetching the userData object from auth service
+      req.userData = response.data;
       next();
     } else {
       return res.json({

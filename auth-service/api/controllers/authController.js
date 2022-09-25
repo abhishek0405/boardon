@@ -10,8 +10,8 @@ const userLoginController = (req, res) => {
   const password = req.body.password;
   Employee.find({ username: username })
     .then(async (foundEmployee) => {
-      const dbPassword = foundEmployee[0].password;
       if (foundEmployee.length == 1) {
+        const dbPassword = foundEmployee[0].password;
         const passwordMatchFlag = await bcrypt.compare(password, dbPassword);
         if (passwordMatchFlag === true) {
           const token = jwt.sign(
@@ -38,6 +38,7 @@ const userLoginController = (req, res) => {
           return res.json("Invalid Credentials");
         }
       } else {
+        res.clearCookie("authToken");
         return res.json({ error: "Invalid Request" });
       }
     })

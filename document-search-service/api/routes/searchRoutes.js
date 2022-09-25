@@ -8,6 +8,6 @@ const {
 const log = config.log();
 const { isLoggedIn } = require("../middleware/isLoggedIn");
 router.get("", isLoggedIn, searchDocumentationController);
-router.get("/suggest", suggestionController);
+router.get("/suggest", isLoggedIn, suggestionController);
 
 module.exports = router;
