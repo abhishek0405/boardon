@@ -8,7 +8,9 @@ const client = new Client({
   node: esUrl,
 });
 const searchDocumentationController = async (req, res) => {
+  log.info(req.userData);
   const companyID = req.userData.cid;
+  log.info(companyID);
   const searchQuery = req.query.searchQuery;
   log.info("Search query is ", searchQuery);
   const result = await client.search({

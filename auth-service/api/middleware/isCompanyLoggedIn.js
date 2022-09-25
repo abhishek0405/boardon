@@ -7,10 +7,19 @@ module.exports = (req, resp, next) => {
     if (decoded.isCompany === true) {
       next();
     } else {
-      resp.json({ Message: "Unauthorized Access" });
+      return resp.json({
+        Authenticated: true,
+        isCompany: false,
+        isEmployee: true,
+        eid: decoded.eid,
+      });
     }
   } catch (error) {
     console.log(error);
-    return resp.json({ Authenticated: false });
+    return resp.json({
+      Authenticated: false,
+      isCompany: false,
+      isEmployee: false,
+    });
   }
 };

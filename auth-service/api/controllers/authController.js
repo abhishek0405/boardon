@@ -7,11 +7,11 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userLoginController = (req, res) => {
-  log.info(req.body);
   const username = req.body.username;
   const password = req.body.password;
   Employee.find({ username: username })
     .then(async (foundEmployee) => {
+      log.info(foundEmployee);
       if (foundEmployee.length == 1) {
         const dbPassword = foundEmployee[0].password;
         const passwordMatchFlag = await bcrypt.compare(password, dbPassword);

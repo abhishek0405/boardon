@@ -6,11 +6,22 @@ module.exports = (req, resp, next) => {
     req.userData = decoded; //created new field use thhis to check if admin or Not.
     if (decoded.isEmployee === true) {
       next();
-    } else {
-      resp.json({ Message: "Unauthorized Access" });
+    }
+    //is a company
+    else {
+      return resp.json({
+        Authenticated: true,
+        isCompany: true,
+        isEmployee: false,
+        cid: decoded.cid,
+      });
     }
   } catch (error) {
     console.log(error);
-    return resp.json({ Authenticated: false });
+    return resp.json({
+      Authenticated: false,
+      isCompany: false,
+      isEmployee: false,
+    });
   }
 };

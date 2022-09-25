@@ -7,6 +7,8 @@ const {
   generateCredentialsFromExcel,
 } = require("../controllers/credController");
 
+const isCompanyLoggedIn = require("../middleware/isCompanyLoggedIn");
+
 const storageEngine = multer.diskStorage({
   destination: function (req, file, cb) {
     cb(null, "uploads/");
@@ -43,6 +45,7 @@ router.post(
   "/generateFromSheet",
   upload.single("hireSheet"),
   validate,
+  isCompanyLoggedIn,
   generateCredentialsFromExcel
 );
 
