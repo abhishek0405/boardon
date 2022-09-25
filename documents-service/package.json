@@ -12,6 +12,7 @@
   "dependencies": {
     "bunyan": "^1.8.15",
     "cloudinary": "^1.30.1",
+    "dotenv": "^16.0.2",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-fileupload": "^1.4.0",
