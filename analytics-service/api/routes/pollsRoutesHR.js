@@ -2,9 +2,8 @@ const express = require("express");
 const docs = require("../models/docs");
 const router = express.Router();
 
-
 const config = require("../config")[process.env.NODE_ENV || "development"];
-
+const isCompanyLoggedIn = require("../middleware/isCompanyLoggedIn");
 const log = config.log();
 const {
   hrDashboard,
@@ -13,18 +12,16 @@ const {
   getIndividualPoll,
   addQuestion,
   postPoll,
-  viewAllresults
+  viewAllresults,
+} = require("../controllers/pollsControllerHR");
+log.info("hi");
 
-}  = require("../controllers/pollsControllerHR");
-log.info("hi")
-
-
-router.get('/hrDashboard', hrDashboard);
-router.get('/polls', getPolls);
-router.post('/createPoll', createPoll)
-router.get('/:cid/:pollId', getIndividualPoll)
-router.post('/addQuestion', addQuestion)
-router.post('/postPoll', postPoll)
-router.get('/viewAllresults', viewAllresults)
+router.get("/hrDashboard", isCompanyLoggedIn, hrDashboard);
+router.get("/polls", isCompanyLoggedIn, getPolls);
+router.post("/createPoll", isCompanyLoggedIn, createPoll);
+router.get("/:cid/:pollId", isCompanyLoggedIn, getIndividualPoll);
+router.post("/addQuestion", isCompanyLoggedIn, addQuestion);
+router.post("/postPoll", isCompanyLoggedIn, postPoll);
+router.get("/viewAllresults", isCompanyLoggedIn, viewAllresults);
 
 module.exports = router;

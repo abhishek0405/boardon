@@ -12,6 +12,7 @@ const uploadDocumentation = async (req, res) => {
 
   const documentObj = {
     ...req.body,
+    author: req.userData.name,
     date: new Date(),
     companyID: req.userData.cid,
   };

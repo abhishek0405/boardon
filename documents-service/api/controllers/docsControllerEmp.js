@@ -6,6 +6,7 @@ const Company = require("../models/company");
 const Employee = require("../models/employee");
 const Comments = require("../models/comments");
 const Polls = require("../models/polls");
+
 //const fileUpload = multer();
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
@@ -25,9 +26,11 @@ cloudinary.config({
 
 empDashboard = async (req, res) => {
   let currEmp = await Employee.findOne({
-    username: "vishaka.mohan@fidelity.com",
+    username: req.userData.username,
   });
+  //console.log(currEmp);
   let curr = await Company.findOne({ cid: currEmp.cid });
+  console.log(curr);
   let arr;
 
   if (curr.docs_needed.length != 1 && curr.docs_needed[0] !== "") {
@@ -35,10 +38,19 @@ empDashboard = async (req, res) => {
   } else {
     arr = [];
   }
+  console.log(arr);
   let currUploaded = await Docs.findOne({ username: currEmp.username });
-  var docsCurr = currUploaded.documents;
+  var docsCurr = {};
+  if (currUploaded !== null) {
+    docsCurr = currUploaded.documents;
+  }
+
   let currComments = await Comments.findOne({ username: currEmp.username });
-  var commCurr = currComments.comments;
+  var commCurr = {};
+  if (currComments !== null) {
+    commCurr = currComments.comments;
+  }
+
   res.render("empDashboard", {
     arr: arr,
     docsCurr: docsCurr,
@@ -48,21 +60,26 @@ empDashboard = async (req, res) => {
 
 viewChecklist = async (req, res) => {
   //retrieving only company 1. Change this later after auth
-  var comp = await Company.findOne({ cid: 1 });
+  var comp = await Company.findOne({ cid: req.userData.cid });
   console.log("test");
-  res.send(comp.documents);
+  res.send(comp.docs_needed);
 };
 
 uploadDocs = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
+    console.log(result);
     //log.info("request body")
     //log.info(req.body)
     var docName = Object.keys(req.body)[0];
     //log.info(docName)
-    let n = await Docs.findOne({ username: "vishaka.mohan@fidelity.com" });
-    if (!("documents" in n) || Object.keys(n.documents).length === 0)
+    let n = await Docs.findOne({ username: req.userData.username });
+    if (n === null) {
+      n = { username: req.userData.username };
+    }
+    if (!("documents" in n) || Object.keys(n.documents).length === 0) {
       n.documents = {};
+    }
     n.documents[docName] = result.url;
     let newDoc = new Docs(n);
     await newDoc.save();

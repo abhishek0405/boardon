@@ -14,6 +14,7 @@ module.exports = (req, resp, next) => {
         isCompany: true,
         isEmployee: false,
         cid: decoded.cid,
+        name: decoded.name,
       });
     }
   } catch (error) {
