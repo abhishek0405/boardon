@@ -1,0 +1,5 @@
+# MONGO_URI = mongodb+srv://vishaka:Vishaka@cluster0.u0mor.mongodb.net/documents-service?retryWrites=true&w=majority
+MONGO_URI = mongodb+srv://abhishek:abhishek@cluster0.0wcibxy.mongodb.net/BoardOn?retryWrites=true&w=majority
+CLOUD_NAME = dpsmilpng
+CLOUD_API_KEY = 369879681634961
+CLOUD_API_SECRET = MsmXoTOP9OaZaJGbVuLjzhoNEuo

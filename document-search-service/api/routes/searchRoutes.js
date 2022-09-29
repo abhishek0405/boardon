@@ -6,8 +6,9 @@ const {
   suggestionController,
 } = require("../controllers/searchController");
 const log = config.log();
-
-router.get("", searchDocumentationController);
-router.get("/suggest", suggestionController);
+//verifies if any user is logged in (company or employee)
+const isLoggedIn = require("../middleware/isLoggedIn");
+router.get("", isLoggedIn, searchDocumentationController);
+router.get("/suggest", isLoggedIn, suggestionController);
 
 module.exports = router;

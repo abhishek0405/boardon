@@ -1,0 +1,2 @@
+MONGOURL = mongodb+srv://abhishek:abhishek@cluster0.0wcibxy.mongodb.net/BoardOn?retryWrites=true&w=majority
+JWT_KEY = "SECRET_KEY"

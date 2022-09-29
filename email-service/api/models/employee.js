@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 //employee schema
 const EmployeeSchema = mongoose.Schema({
   cid: {
-    type: Number,
+    type: mongoose.Schema.Types.ObjectId,
   },
   eid: {
     type: mongoose.Schema.Types.ObjectId,
