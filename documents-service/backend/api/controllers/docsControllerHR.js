@@ -21,7 +21,7 @@ hrDashboard = async (req, res) => {
   //log.info("hello")
   const cid = req.userData.cid;
   console.log(cid);
-  let curr = await Company.findOne({cid : 1})
+  let curr = await Company.findOne({cid : cid})
   let arr
 
   if(curr.docs_needed.length != 1 && curr.docs_needed[0] !== ""){
@@ -38,6 +38,8 @@ hrDashboard = async (req, res) => {
 }
 
 createChecklist = async (req, res) => {
+  console.log(req.body)
+  log.info(req.body)
   let requirements = req.body;
   log.info("hellooooo")
   log.info(requirements)
@@ -88,7 +90,7 @@ createChecklist = async (req, res) => {
 getDocs = async (req, res) => {
 
   const cid = req.userData.cid;
-  var allEmployees = await Employee.find({cid : 1})
+  var allEmployees = await Employee.find({cid : cid})
   
 
   res.json({allEmp : allEmployees})
@@ -176,7 +178,11 @@ postComment = async (req, res) => {
     log.info(docName)
     log.info(comment)
     const username = req.body.username;
+    console.log(req.body.username)
     let n = await Comments.findOne({username : username })
+    if (n === null) {
+      n = {username : username}
+    }
     if(!("comments" in n) || Object.keys(n.comments).length === 0)
       n.comments = {}
     n.comments[docName] = comment

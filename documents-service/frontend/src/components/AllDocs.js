@@ -12,7 +12,9 @@ function AllDocs(){
     
 
     useEffect(() => {
-        fetch("http://localhost:5000/hr/getDocs").then(
+        fetch("http://localhost:5000/hr/getDocs", {
+            credentials: 'include'
+        }).then(
         response => {return response.json()}
         //console.log(response)}
         ).then(

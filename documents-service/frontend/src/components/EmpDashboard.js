@@ -29,7 +29,7 @@ const customStyles = {
 
 Modal.setAppElement('#root');
 
-function HrDashboard () {
+function EmpDashboard () {
 
     let subtitle;
     const [modalIsOpen, setIsOpen] = React.useState(false);
@@ -49,23 +49,10 @@ function HrDashboard () {
 
 
 
-    //functions to handle submit
-    const [docs, setDocs] = useState('')
-    const handleSubmit = async (e) => {
-        //e.preventDefault();
-        const docsToAdd = { docs };
-
-        console.log(docsToAdd)
-        axios.post('http://localhost:5000/hr/createChecklist', docsToAdd)
-        .then(res=> console.log(res.data))
-        .catch(err=>console.log(err.response.data));
-  
     
-    }
-
 
     return (
-        <div className="HrDashboard">
+        <div className="EmpDashboard">
             <div className="navbar-bg">
                 
             <div className="blue-btn" style={{backgroundColor: '#B3FF00', top : 25, fontSize : 24, fontFamily : 'Arial', color : 'black'}}>BoardOn</div>
@@ -97,43 +84,29 @@ function HrDashboard () {
                 
                 <ul>
                     <li>
-                    <a href={"/hr/hrDashboard"} className="nav_link">
+                    <a href={"/emp/empDashboard"} className="nav_link">
                     <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span className="nav_name" style={{fontSize : 16}}>Credentials</span>
+                        <span className="nav_name" style={{fontSize : 16}}>Profile</span>
                     </a>
                     </li>
                     <li>
-                    {(window.location.href === 'http://localhost:3000/hr/hrDashboard') ? (<a href={"/hr/hrDashboard"} className="nav_link active">
+                    {(window.location.href === 'http://localhost:3000/emp/empDashboard') ? (<a href={"/emp/empDashboard"} className="nav_link active">
                         <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Checklist</span>
-                    </a>) : (<a href={"/hr/hrDashboard"} className="nav_link">
+                        <span class="nav_name" style={{fontSize : 16}}>Docs Upload</span>
+                    </a>) : (<a href={"/emp/empDashboard"} className="nav_link">
                         <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Checklist</span>
+                        <span class="nav_name" style={{fontSize : 16}}>Docs upload</span>
                     </a>)}
                     
                     </li>
                     
-                    <li>
-                    {(window.location.href === 'http://localhost:3000/hr/getDocs') ? (<a href={"/hr/getDocs"} className="nav_link active">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>All employees</span>
-                    </a>) : (<a href={"/hr/getDocs"} className="nav_link">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>All employees</span>
-                    </a>)}
-                    </li>
                     <li>
                     <a href="#" class="nav_link">
                         <ion-icon name="people-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name" style={{fontSize : 16}}>Polls</span>
                     </a>
                     </li>
-                    <li>
-                    <a href="#" class="nav_link">
-                        <ion-icon name="settings-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Polls dashboard</span>
-                    </a>
-                    </li>
+                    
                     <li>
                     <a href="#" class="nav_link">
                         <ion-icon name="settings-outline" class="nav_icon"></ion-icon>
@@ -158,4 +131,4 @@ function HrDashboard () {
 }
 
 
-export default HrDashboard;
+export default EmpDashboard;

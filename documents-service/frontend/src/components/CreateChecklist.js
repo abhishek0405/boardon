@@ -1,6 +1,10 @@
 import {useEffect, useState, React, useRef} from 'react'
 import axios from 'axios'
 import working_woman from './working_woman.png'
+import Cookies from 'universal-cookie';
+
+const cookies = new Cookies();
+
 
 
 function CreateChecklist(){
@@ -55,17 +59,28 @@ function CreateChecklist(){
         }
         
         
-        axios.post('http://localhost:5000/hr/createChecklist', docsToAdd)
+        axios.post('http://localhost:5000/hr/createChecklist', docsToAdd, {
+            withCredentials: true
+        })
         .then(res=> {console.log(res.data)
         //setBackendData(newdata)
         })
         .catch(err=>console.log(err.response.data));
+
+
+        // fetch('http://localhost:5000/hr/createChecklist', {
+        //     method: 'post',
+        //     headers: {'Content-Type':'application/json'},
+        //     body: docsToAdd
+        //    });
   
     
     }
 
     useEffect(() => {
-        fetch("http://localhost:5000/hr/hrDashboard").then(
+        fetch("http://localhost:5000/hr/hrDashboard", {
+            credentials: 'include'
+        }).then(
         response => {return response.json()}
         //console.log(response)}
         ).then(

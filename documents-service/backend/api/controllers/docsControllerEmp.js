@@ -46,7 +46,8 @@ empDashboard = async (req, res) => {
   if (currComments !== null) {
     commCurr = currComments.comments;
   }
-  res.render('empDashboard', {
+  res.json({
+    
     arr : arr , 
     docsCurr : docsCurr, 
     commCurr : commCurr
@@ -65,6 +66,7 @@ viewChecklist = async (req, res) => {
 
 uploadDocs = async (req, res) => {
   try{
+    console.log(req.body)
     const result = await cloudinary.uploader.upload(req.file.path)
     //log.info("request body")
     //log.info(req.body)
@@ -79,7 +81,7 @@ uploadDocs = async (req, res) => {
     n.documents[docName] = result.url
     let newDoc = new Docs(n)
     await newDoc.save()
-    res.redirect('/emp/empDashboard')
+    //res.redirect('/emp/empDashboard')
   }
   catch(err){
     log.info(err)
