@@ -1,6 +1,6 @@
 const bunyan = require("bunyan");
 // Load package.json
-const pjs = require("D:/college stuff/SEM 7/TARP/boardon/documents-service/package.json");
+const pjs = require("D:/college stuff/SEM 7/TARP/boardon/documents-service/backend/package.json");
 
 // Get some meta info from the package.json
 const { name, version } = pjs;

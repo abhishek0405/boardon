@@ -10,7 +10,7 @@ const {
   hrDashboard,
   createChecklist,
   viewChecklist,
-  updateChecklist,
+  
   getDocs,
   getIndividualDocs,
   postComment,
@@ -24,7 +24,7 @@ router.get('/hrDashboard', hrDashboard);
 
 router.post('/createChecklist', createChecklist);
 router.get('/viewChecklist', viewChecklist);
-router.post('/updateChecklist', updateChecklist);
+
 router.get('/getDocs',getDocs);
 router.get('/:username', getIndividualDocs);
 router.post('/postComment', postComment);

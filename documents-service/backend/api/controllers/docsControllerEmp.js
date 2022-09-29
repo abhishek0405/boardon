@@ -5,8 +5,9 @@ const multer = require('multer');
 const Company = require('../models/company');
 const Employee = require('../models/employee')
 const Comments = require('../models/comments')
-const Polls = require('../../../analytics-service/api/models/polls')
+const Polls = require('../models/polls')
 //const fileUpload = multer();
+
 const cloudinary = require('cloudinary').v2;
 const streamifier = require('streamifier');
 //const { update } = require('../../../email-service/api/models/employee');

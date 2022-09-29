@@ -10,7 +10,7 @@ const service = require("../api/app");
 
 const server = http.createServer(service);
 // console.log(process.env.MONGOURL)
-server.listen(process.env.PORT || 5000);
+server.listen(process.env.PORT || 5001);
 
 server.on("listening", () => {
   log.info(
