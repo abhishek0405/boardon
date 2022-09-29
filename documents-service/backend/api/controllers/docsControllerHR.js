@@ -19,6 +19,8 @@ const log = config.log();
 
 hrDashboard = async (req, res) => {
   //log.info("hello")
+  const cid = req.userData.cid;
+  console.log(cid);
   let curr = await Company.findOne({cid : 1})
   let arr
 
@@ -66,9 +68,9 @@ createChecklist = async (req, res) => {
   if(requirements.VoterId){
     docs_needed.push('VoterId')
   }
-
+  const cid = req.userData.cid;
   //retrieving only company 1. Change this later after auth
-  var comp = await Company.findOne({cid : 1})
+  var comp = await Company.findOne({cid : cid})
   
   
   comp.docs_needed = docs_needed;
@@ -78,25 +80,6 @@ createChecklist = async (req, res) => {
 
 };
 
-viewChecklist = async (req, res) => {
-
-  var comp = await Company.findOne({cid : 1})
-  let arr
-
-  if(comp.docs_needed.length != 1 && comp.docs_needed[0] !== ""){
-    arr = comp.docs_needed
-  }
-  else{
-    arr = []
-  }
-
-  res.json({arr : arr})
-  //res.render('hrDashboard', {arr : arr})
-
-  
-};
-
-
 
 //UPDATE CHECKLIST LATER WHEN WE ADD INTERACTIVITY TO THE LIST
 
@@ -104,9 +87,9 @@ viewChecklist = async (req, res) => {
 
 getDocs = async (req, res) => {
 
+  const cid = req.userData.cid;
   var allEmployees = await Employee.find({cid : 1})
-  log.info("getdocs")
-  log.info(allEmployees)
+  
 
   res.json({allEmp : allEmployees})
   
@@ -118,7 +101,8 @@ getIndividualDocs = async (req, res) => {
 
   //req.params.username
   log.info("oiii")
-  let currEmp = await Employee.findOne({username : 'vishaka.mohan@fidelity.com'})
+  const username = req.params.username;
+  let currEmp = await Employee.findOne({username : username})
   let curr = await Company.findOne({cid : currEmp.cid})
   
   let arr
@@ -131,8 +115,15 @@ getIndividualDocs = async (req, res) => {
   }
   let currUploaded = await Docs.findOne({username : currEmp.username})
   let currComments = await Comments.findOne({username : currEmp.username})
-  var docsCurr = currUploaded.documents
-  var commCurr = currComments.comments
+  var docsCurr = {};
+  var commCurr = {};
+  if (currUploaded !== null) {
+    docsCurr = currUploaded.documents;
+  }
+  if (currComments !== null) {
+    commCurr = currComments.comments;
+  }
+  
   res.json({eid : currEmp.eid, name : currEmp.name, username : currEmp.username, arr : arr , docsCurr : docsCurr, commCurr : commCurr})
   //res.render('individualEmployee', {eid : currEmp.eid, name : currEmp.name, username : currEmp.username, arr : arr , docsCurr : docsCurr, commCurr : commCurr})
 
@@ -184,7 +175,8 @@ postComment = async (req, res) => {
     }
     log.info(docName)
     log.info(comment)
-    let n = await Comments.findOne({username : "vishaka.mohan@fidelity.com" })
+    const username = req.body.username;
+    let n = await Comments.findOne({username : username })
     if(!("comments" in n) || Object.keys(n.comments).length === 0)
       n.comments = {}
     n.comments[docName] = comment
@@ -200,7 +192,6 @@ postComment = async (req, res) => {
 module.exports = {
   hrDashboard,
   createChecklist,
-  viewChecklist,
   getDocs,
   getIndividualDocs,
   postComment,

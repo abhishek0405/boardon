@@ -1,6 +1,8 @@
 const express = require("express");
 const docs = require("../models/docs");
 const router = express.Router();
+const isCompanyLoggedIn = require("../middleware/isCompanyLoggedIn");
+
 
 
 const config = require("../config")[process.env.NODE_ENV || "development"];
@@ -9,7 +11,7 @@ const log = config.log();
 const {
   hrDashboard,
   createChecklist,
-  viewChecklist,
+  
   
   getDocs,
   getIndividualDocs,
@@ -20,14 +22,13 @@ const {
 log.info("hi")
 
 
-router.get('/hrDashboard', hrDashboard);
+router.get('/hrDashboard', isCompanyLoggedIn, hrDashboard);
 
-router.post('/createChecklist', createChecklist);
-router.get('/viewChecklist', viewChecklist);
+router.post('/createChecklist', isCompanyLoggedIn, createChecklist);
 
-router.get('/getDocs',getDocs);
-router.get('/:username', getIndividualDocs);
-router.post('/postComment', postComment);
+router.get('/getDocs', isCompanyLoggedIn, getDocs);
+router.get('/:username',  isCompanyLoggedIn, getIndividualDocs);
+router.post('/postComment', isCompanyLoggedIn, postComment);
 
 
 module.exports = router;
