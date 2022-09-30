@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <meta
@@ -23,42 +24,7 @@
    crossorigin="anonymous"
    referrerpolicy="no-referrer"></script>
 
-   <script>
-    const showMenu = (toggleId, navbarId, bodyId) => {
-        const toggle = document.getElementById(toggleId),
-          navbar = document.getElementById(navbarId);
-        body = document.getElementById(bodyId);
-
-        if (toggle && navbar) {
-          toggle.addEventListener("click", () => {
-            navbar.classList.toggle("expander");
-            body.classList.toggle("body-pd");
-          });
-        }
-      };
-      showMenu("nav-toggle", "navbar", "body");
-
-      /* == Active attribute == */
-      const linkColor = document.querySelectorAll(".nav_link");
-      function colorLink() {
-        linkColor.forEach((item) => item.classList.remove("active"));
-        this.classList.add("active");
-      }
-      linkColor.forEach((item) => item.addEventListener("click", colorLink));
-
-      /* == Collapse Menu == */
-      const linkCollapse = document.getElementsByClassName("collapse_link");
-      for (let i = 0; i < linkCollapse.length; i++) {
-        linkCollapse[i].addEventListener("click", function () {
-          const collapseMenu = this.nextElementSibling;
-          collapseMenu.classList.toggle("showCollapse");
-
-          const rotate = collapseMenu.previousElemntSibling;
-          rotate.classList.toggle("rotate");
-        });
-      }
-
-   </script>
+   
 
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
@@ -84,5 +50,64 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>
+      const showMenu = (toggleId, navbarId, bodyId) => {
+          const toggle = document.getElementById(toggleId),
+            navbar = document.getElementById(navbarId);
+          body = document.getElementById(bodyId);
+  
+          if (toggle && navbar) {
+            toggle.addEventListener("click", () => {
+              navbar.classList.toggle("expander");
+              body.classList.toggle("body-pd");
+            });
+          }
+        };
+        showMenu("nav-toggle", "navbar", "body");
+  
+        /* == Active attribute == */
+        const linkColor = document.querySelectorAll(".nav_link");
+        function colorLink() {
+          linkColor.forEach((item) => item.classList.remove("active"));
+          this.classList.add("active");
+        }
+        linkColor.forEach((item) => item.addEventListener("click", colorLink));
+  
+        /* == Collapse Menu == */
+        const linkCollapse = document.getElementsByClassName("collapse_link");
+        for (let i = 0; i < linkCollapse.length; i++) {
+          linkCollapse[i].addEventListener("click", function () {
+            const collapseMenu = this.nextElementSibling;
+            collapseMenu.classList.toggle("showCollapse");
+  
+            const rotate = collapseMenu.previousElemntSibling;
+            rotate.classList.toggle("rotate");
+          });
+        }
+  
+  
+        document.getElementById("myBtn").onclick = function() {myFunction()};
+  
+  /* myFunction toggles between adding and removing the show class, which is used to hide and show the dropdown content */
+  function myFunction() {
+      document.getElementById("myDropdown").classList.toggle("show");
+  }
+  
+  // Close the dropdown if the user clicks outside of it
+  window.onclick = function(event) {
+      if (!event.target.matches('.dropbtn')) {
+  
+          var dropdowns = document.getElementsByClassName("dropdown-content");
+          var i;
+          for (i = 0; i < dropdowns.length; i++) {
+              var openDropdown = dropdowns[i];
+              if (openDropdown.classList.contains('show')) {
+                  openDropdown.classList.remove('show');
+              }
+          }
+      }
+  }
+  
+     </script>
   </body>
 </html>

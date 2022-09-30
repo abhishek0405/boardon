@@ -7,6 +7,8 @@ import axios from 'axios'
 import bell_icon from './bell_icon.png'
 import user_icon from './user_icon.png'
 import message_icon from './message_icon.png'
+import { useNavigate } from "react-router-dom";
+
 
 const customStyles = {
   content: {
@@ -33,6 +35,7 @@ function HrDashboard () {
 
     let subtitle;
     const [modalIsOpen, setIsOpen] = React.useState(false);
+    const navigate = useNavigate();
 
     function openModal() {
         setIsOpen(true);
@@ -51,16 +54,22 @@ function HrDashboard () {
 
     //functions to handle submit
     const [docs, setDocs] = useState('')
-    const handleSubmit = async (e) => {
-        //e.preventDefault();
-        const docsToAdd = { docs };
-
-        console.log(docsToAdd)
-        axios.post('http://localhost:5000/hr/createChecklist', docsToAdd)
-        .then(res=> console.log(res.data))
-        .catch(err=>console.log(err.response.data));
-  
     
+
+    const handleClick = async (e) => {
+        console.log('hellp')
+        axios.delete('http://localhost:3002/auth/logout', {
+            withCredentials : true
+        } )
+        .then(res=> {console.log(res.data)
+            if(res.data.status === "success"){
+                navigate('/')
+            }
+            
+            
+        
+        })
+        .catch(err=>console.log(err.response.data));
     }
 
 
@@ -145,10 +154,13 @@ function HrDashboard () {
                 </nav>
             </div>
             
-            <img src={user_icon} alt="bell" style={{position : 'absolute', top : '4%',left : '95%', width : '30px', height : '30px'}} />
+            <img src={user_icon} alt="bell" style={{position : 'absolute', top : '4%',left : '95%', width : '30px', height : '30px'}} onClick={handleClick} /> 
+            
+            
+            
             <img src={bell_icon} alt="bell" style={{position : 'absolute', top : '4%',left : '91%', width : '30px', height : '30px'}} />
            
-            <img src={message_icon} alt="bell" style={{position : 'absolute', top : '3.5%',left : '87%', width : '40px', height : '40px'}} />
+            <img src={message_icon} alt="bell" style={{position : 'absolute', top : '3.5%',left : '87%', width : '40px', height : '40px'}}  />
 
            
            
