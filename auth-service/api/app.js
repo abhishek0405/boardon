@@ -1,9 +1,10 @@
 const express = require("express");
 const app = express();
+require("dotenv").config();
 const config = require("../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 const cookieParser = require("cookie-parser");
-require("dotenv").config();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const authRoutes = require("../api/routes/authRoute");

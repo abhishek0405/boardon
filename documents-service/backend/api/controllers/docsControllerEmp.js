@@ -6,8 +6,8 @@ const Company = require("../models/company");
 const Employee = require("../models/employee");
 const Comments = require("../models/comments");
 const Polls = require("../models/polls");
-
 //const fileUpload = multer();
+
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
 //const { update } = require('../../../email-service/api/models/employee');
@@ -25,18 +25,12 @@ cloudinary.config({
 });
 
 empDashboard = async (req, res) => {
-  let currEmp = await Employee.findOne({
-    username: req.userData.username,
-  });
-  //console.log(currEmp);
+  let currEmp = await Employee.findOne({ username: req.userData.username });
   let curr = await Company.findOne({ cid: currEmp.cid });
-  console.log(curr);
   let arr;
 
   if (curr.docs_needed.length != 1 && curr.docs_needed[0] !== "") {
     arr = curr.docs_needed;
-  } else {
-    arr = [];
   }
   console.log(arr);
   let currUploaded = await Docs.findOne({ username: currEmp.username });
@@ -44,19 +38,30 @@ empDashboard = async (req, res) => {
   if (currUploaded !== null) {
     docsCurr = currUploaded.documents;
   }
-
   let currComments = await Comments.findOne({ username: currEmp.username });
   var commCurr = {};
   if (currComments !== null) {
     commCurr = currComments.comments;
   }
-
-  res.render("empDashboard", {
+  res.json({
     arr: arr,
     docsCurr: docsCurr,
     commCurr: commCurr,
   });
 };
+
+//   let currComments = await Comments.findOne({ username: currEmp.username });
+//   var commCurr = {};
+//   if (currComments !== null) {
+//     commCurr = currComments.comments;
+//   }
+
+//   res.render("empDashboard", {
+//     arr: arr,
+//     docsCurr: docsCurr,
+//     commCurr: commCurr,
+//   });
+// };
 
 viewChecklist = async (req, res) => {
   //retrieving only company 1. Change this later after auth
@@ -67,8 +72,8 @@ viewChecklist = async (req, res) => {
 
 uploadDocs = async (req, res) => {
   try {
+    console.log(req.body);
     const result = await cloudinary.uploader.upload(req.file.path);
-    console.log(result);
     //log.info("request body")
     //log.info(req.body)
     var docName = Object.keys(req.body)[0];
@@ -77,16 +82,13 @@ uploadDocs = async (req, res) => {
     if (n === null) {
       n = { username: req.userData.username };
     }
-    if (!("documents" in n) || Object.keys(n.documents).length === 0) {
+    if (!("documents" in n) || Object.keys(n.documents).length === 0)
       n.documents = {};
-    }
     n.documents[docName] = result.url;
     let newDoc = new Docs(n);
     await newDoc.save();
-    res.redirect("/emp/empDashboard");
-  } catch (err) {
-    log.info(err);
-  }
+    //res.redirect('/emp/empDashboard')
+  } catch (err) {}
 };
 
 module.exports = {

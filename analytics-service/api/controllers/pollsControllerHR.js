@@ -3,7 +3,7 @@ const MongoClient = require("mongodb").MongoClient;
 const Company = require("../models/company");
 const Docs = require("../models/docs");
 const Employee = require("../models/employee");
-const Comments = require("../../../documents-service/api/models/comments");
+const Comments = require("../models/comments");
 const Polls = require("../models/polls");
 var services = {};
 
