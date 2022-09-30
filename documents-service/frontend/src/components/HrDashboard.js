@@ -103,7 +103,7 @@ function HrDashboard () {
                     </a>
                     </li>
                     <li>
-                    {(window.location.href === 'http://localhost:3000/hr/hrDashboard') ? (<a href={"/hr/hrDashboard"} className="nav_link active">
+                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/hrDashboard') ? (<a href={"/hr/hrDashboard"} className="nav_link active">
                         <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name" style={{fontSize : 16}}>Checklist</span>
                     </a>) : (<a href={"/hr/hrDashboard"} className="nav_link">
@@ -114,7 +114,7 @@ function HrDashboard () {
                     </li>
                     
                     <li>
-                    {(window.location.href === 'http://localhost:3000/hr/getDocs') ? (<a href={"/hr/getDocs"} className="nav_link active">
+                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/getDocs') ? (<a href={"/hr/getDocs"} className="nav_link active">
                         <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name" style={{fontSize : 16}}>All employees</span>
                     </a>) : (<a href={"/hr/getDocs"} className="nav_link">

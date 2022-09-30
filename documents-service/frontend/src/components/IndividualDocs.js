@@ -74,7 +74,9 @@ function IndividualDocs(){
         axios.post('http://localhost:5000/hr/postComment',commToAdd, {
             withCredentials: true
         })
-        .then(res=> {console.log(res.data)})
+        .then(res=> {console.log(res.data)
+            setBackendData(res.data)
+        })
         .catch(err=>console.log(err.response.data));
   
     

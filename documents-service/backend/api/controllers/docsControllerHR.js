@@ -79,6 +79,19 @@ createChecklist = async (req, res) => {
 
   await comp.save();
   
+  
+  let arr
+
+  if(comp.docs_needed.length != 1 && comp.docs_needed[0] !== ""){
+    arr = comp.docs_needed
+  }
+  else{
+    arr = []
+  }
+
+  
+  res.json({arr : arr})
+  
 
 };
 
@@ -188,6 +201,30 @@ postComment = async (req, res) => {
     n.comments[docName] = comment
     let newComment = new Comments(n)
     await newComment.save()
+    
+    let currEmp = await Employee.findOne({username : username})
+    let curr = await Company.findOne({cid : currEmp.cid})
+  
+    let arr
+
+    if(curr.docs_needed.length != 1 && curr.docs_needed[0] !== ""){
+      arr = curr.docs_needed
+    }
+    else{
+      arr = []
+    }
+    let currUploaded = await Docs.findOne({username : currEmp.username})
+    let currComments = await Comments.findOne({username : currEmp.username})
+    var docsCurr = {};
+    var commCurr = {};
+    if (currUploaded !== null) {
+      docsCurr = currUploaded.documents;
+    }
+    if (currComments !== null) {
+      commCurr = currComments.comments;
+    }
+    
+    res.json({eid : currEmp.eid, name : currEmp.name, username : currEmp.username, arr : arr , docsCurr : docsCurr, commCurr : commCurr})
 
     //res.redirect('/hr/vishaka.mohan@fidelity.com')
   

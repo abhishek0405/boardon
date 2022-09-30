@@ -90,7 +90,7 @@ function EmpDashboard () {
                     </a>
                     </li>
                     <li>
-                    {(window.location.href === 'http://localhost:3000/emp/empDashboard') ? (<a href={"/emp/empDashboard"} className="nav_link active">
+                    {(window.location.href.split('?')[0] === 'http://localhost:3000/emp/empDashboard') ? (<a href={"/emp/empDashboard"} className="nav_link active">
                         <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name" style={{fontSize : 16}}>Docs Upload</span>
                     </a>) : (<a href={"/emp/empDashboard"} className="nav_link">

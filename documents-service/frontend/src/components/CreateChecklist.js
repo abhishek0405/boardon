@@ -27,7 +27,7 @@ function CreateChecklist(){
     
     
     const handleSubmit = async (e) => {
-        //e.preventDefault();
+        e.preventDefault();
         const docsToAdd = { Aadhaar : state.Aadhaar, Passport : state.Passport, PanCard : state.PanCard, BirthCertificate : state.BirthCertificate, ElectricityBill : state.ElectricityBill, VoterId : state.VoterId, Marksheet : state.Marksheet, Resume : state.Resume };
 
         console.log(docsToAdd)
@@ -63,7 +63,7 @@ function CreateChecklist(){
             withCredentials: true
         })
         .then(res=> {console.log(res.data)
-        //setBackendData(newdata)
+            setBackendData(res.data)
         })
         .catch(err=>console.log(err.response.data));
 
