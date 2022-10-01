@@ -24,7 +24,8 @@ function IndividualDocs(){
     
 
     useEffect(() => {
-        fetch(window.location.href, {
+        //console.log(window.location.pathname)
+        fetch(window.location.pathname, {
             credentials : 'include'
         }).then(
         response => {return response.json()}
