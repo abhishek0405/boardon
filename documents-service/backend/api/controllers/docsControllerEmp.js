@@ -73,11 +73,11 @@ viewChecklist = async (req, res) => {
 uploadDocs = async (req, res) => {
   try {
     console.log(req.body);
+    console.log(req.file);
     const result = await cloudinary.uploader.upload(req.file.path);
-    //log.info("request body")
-    //log.info(req.body)
-    var docName = Object.keys(req.body)[0];
-    //log.info(docName)
+    console.log(result);
+    var docName = req.body.doc;
+    log.info(docName);
     let n = await Docs.findOne({ username: req.userData.username });
     if (n === null) {
       n = { username: req.userData.username };
@@ -87,6 +87,30 @@ uploadDocs = async (req, res) => {
     n.documents[docName] = result.url;
     let newDoc = new Docs(n);
     await newDoc.save();
+    let currEmp = await Employee.findOne({ username: req.userData.username });
+    let curr = await Company.findOne({ cid: currEmp.cid });
+    let arr;
+
+    if (curr.docs_needed.length != 1 && curr.docs_needed[0] !== "") {
+      arr = curr.docs_needed;
+    } else {
+      arr = [];
+    }
+    let currUploaded = await Docs.findOne({ username: currEmp.username });
+    var docsCurr = {};
+    if (currUploaded !== null) {
+      docsCurr = currUploaded.documents;
+    }
+    let currComments = await Comments.findOne({ username: currEmp.username });
+    var commCurr = {};
+    if (currComments !== null) {
+      commCurr = currComments.comments;
+    }
+    res.json({
+      arr: arr,
+      docsCurr: docsCurr,
+      commCurr: commCurr,
+    });
     //res.redirect('/emp/empDashboard')
   } catch (err) {}
 };

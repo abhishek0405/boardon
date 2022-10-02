@@ -15,6 +15,7 @@ const searchDocumentationController = async (req, res) => {
   log.info("Search query is ", searchQuery);
   const result = await client.search({
     index: "documents",
+
     query: {
       bool: {
         must: [
@@ -90,7 +91,47 @@ const suggestionController = async (req, res) => {
   return res.json(Array.from(suggestionResponse));
 };
 
+const searchAllController = async (req, res) => {
+  const companyID = req.userData.cid;
+  const result = await client.search({
+    index: "documents",
+    size: 100,
+    query: {
+      bool: {
+        filter: {
+          term: {
+            companyID: companyID,
+          },
+        },
+      },
+    },
+  });
+  return res.json(result.hits.hits);
+};
+
+const searchDocumentByIdController = async (req, res) => {
+  const id = req.params.id;
+
+  const result = await client.search({
+    index: "documents",
+
+    query: {
+      bool: {
+        filter: {
+          term: {
+            _id: id,
+          },
+        },
+      },
+    },
+  });
+
+  return res.json(result.hits.hits);
+};
+
 module.exports = {
   searchDocumentationController,
   suggestionController,
+  searchAllController,
+  searchDocumentByIdController,
 };

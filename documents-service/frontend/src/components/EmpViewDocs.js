@@ -1,8 +1,9 @@
-import {useEffect, useState, React, useRef} from 'react'
+import {useEffect, useState, React, useRef, useReducer} from 'react'
 import axios from 'axios'
 import working_woman from './working_woman.png'
 import doggie from './doggie.png'
 import FileUploader from './FileUploader'
+import { useNavigate } from "react-router-dom";
 
 
 function EmpViewDocs(){
@@ -18,6 +19,9 @@ function EmpViewDocs(){
     const [selectedFileMarksheet, setSelectedFileMarksheet] = useState(null)
     const [username, setUsername] = useState('')
     const [file, setSelectedFile] = useState(null);
+    const [reducerValue, forceUpdate] = useReducer(x => x+1, 0)
+    const history = useNavigate();
+    const [loading, setLoading] = useState('')
     
     //searchParams.get("username")  
     
@@ -34,9 +38,7 @@ function EmpViewDocs(){
         ).then(
         data => {
             setBackendData(data)
-            
-            
-                
+                 
         }
         )
     }, []);
@@ -44,50 +46,54 @@ function EmpViewDocs(){
 
 
     const handleSubmit = async (e) => {
+        
         e.preventDefault()
-        
-         //const commToAdd = new FormData();
-         const formData = new FormData()
-        // formData.append("username", username);
-        formData.append(
-            "file",
-            file  
-          );
-          formData.append("doc", username)
-        
+         const commToAdd = new FormData();
+         
+        if(selectedFileAadhaar !== null){
+            commToAdd.append( "file" , selectedFileAadhaar)
+            commToAdd.append("doc", "Aadhaar")
+        }
+        else if(selectedFileBirthCertificate !== null){
+            commToAdd.append("file" , selectedFileBirthCertificate)
+            commToAdd.append("doc", "BirthCertificate")
+        }
+        else if(selectedFilePanCard !== null){
+            commToAdd.append("file" , selectedFilePanCard)
+            commToAdd.append("doc", "PanCard")
+        }
+        else if(selectedFilePassport !== null){
+            commToAdd.append("file" , selectedFilePassport)
+            commToAdd.append("doc", "Passport")
+        }
 
+        else if(selectedFileMarksheet !== null){
+            commToAdd.append("file" , selectedFileMarksheet)
+            commToAdd.append("doc", "Marksheet")
+        }
+        else if(selectedFileResume !== null){
+            commToAdd.append("file" , selectedFileResume)
+            commToAdd.append("doc", "Resume")
+        }
+        else if(selectedFileElectricityBill !== null){
+            commToAdd.append("file" , selectedFileElectricityBill)
+            commToAdd.append("doc", "ElectricityBill")
+        }
+        else if(selectedFileVoterId !== null){
+            commToAdd.append("file" , selectedFileVoterId)
+            commToAdd.append("doc", "VoterId")
+        }
         
-        // if(selectedFileAadhaar !== null){
-        //     commToAdd.append("Aadhaar" , selectedFileAadhaar)
-        // }
-        // else if(selectedFileBirthCertificate !== null){
-        //     commToAdd.append("BirthCertificate" , selectedFileBirthCertificate)
-        // }
-        // else if(selectedFilePanCard !== null){
-        //     commToAdd.append("PanCard" , selectedFilePanCard)
-        // }
-        // else if(selectedFilePassport !== null){
-        //     commToAdd.append("Passport" , selectedFilePassport)
-        // }
-
-        // else if(selectedFileMarksheet !== null){
-        //     commToAdd.append("Marksheet" , selectedFileMarksheet)
-        // }
-        // else if(selectedFileResume !== null){
-        //     commToAdd.append("Resume" , selectedFileResume)
-        // }
-        // else if(selectedFileElectricityBill !== null){
-        //     commToAdd.append("ElectricityBill" , selectedFileElectricityBill)
-        // }
-        // else if(selectedFileVoterId !== null){
-        //     commToAdd.append("VoterId" , selectedFileVoterId)
-        // }
-        
-        
-        axios.post('http://localhost:5000/emp/uploadDocs',formData, {
+        setLoading('loading')
+        axios.post('http://localhost:5000/emp/uploadDocs',commToAdd, {
             withCredentials: true
         })
-        .then(res=> {console.log(res.data)})
+        .then(res=> {
+            console.log(res.data) 
+            setBackendData(res.data)
+            setLoading('')
+            
+        })
         .catch(err=>console.log(err.response.data));
   
     
@@ -101,8 +107,14 @@ function EmpViewDocs(){
     return (
         <div className="IndividualDocs" style={{position : 'absolute', top : '12%',left : '20%' }}>
         
-
-        
+            {
+                (loading === 'loading') ? (
+                    <p>Uploading...</p>
+                ) : (
+                    <p></p>
+                )
+            }
+            
             {(typeof backendData.arr === 'undefined') ? (
                 <p>Loading...</p>
             ) : ( 
@@ -141,8 +153,8 @@ function EmpViewDocs(){
                                      
                                     <td >
                                         <form onSubmit={handleSubmit}>
-                                        {/* <input type="file" id={"selectedFile" + d} name={"selectedFile" + d} onChange={(e) => eval("setSelectedFile"+d+"(e.target.files[0])") }/> */}
-                                        <input type="file"  name={"file"}  onChange={(e) => setSelectedFile(e.target.files[0]) }/>
+                                        <input type="file" id={"selectedFile" + d} name={"selectedFile" + d} onChange={(e) => eval("setSelectedFile"+d+"(e.target.files[0])") }/>
+                                        {/* <input type="file"  name={file}  onChange={(e) => setSelectedFile(e.target.files[0]) }/> */}
                                         <input type="text" name={d} id={d}  onChange={(e) => setUsername(e.target.value) } hidden/>
                                         <button style={{backgroundColor: '#4C00FF', color : 'white', borderRadius : '8px', marginLeft : '5px'}}>Post</button>
                                         </form>
