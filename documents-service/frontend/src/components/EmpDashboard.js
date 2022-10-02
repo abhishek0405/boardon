@@ -1,12 +1,14 @@
 import React from "react";
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Modal from "react-modal";
-import { useNavigate } from "react-router-dom";
+
 import { useState } from "react";
 import axios from "axios";
 import bell_icon from "./bell_icon.png";
 import user_icon from "./user_icon.png";
 import message_icon from "./message_icon.png";
+import { useNavigate } from "react-router-dom";
 
 const customStyles = {
   content: {
@@ -55,6 +57,21 @@ function EmpDashboard() {
     setIsOpen(false);
   }
 
+  const handleClick = async (e) => {
+    console.log("hellp");
+    axios
+      .delete("http://localhost:3002/auth/logout", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          navigate("/");
+        }
+      })
+      .catch((err) => console.log(err.response.data));
+  };
+
   return (
     <div className="EmpDashboard">
       <div className="navbar-bg">
@@ -83,11 +100,19 @@ function EmpDashboard() {
           />
           <button
             type="submit"
-            className="searchButton"
             onClick={handleGoSubmit}
+            style={{
+              fontSize: 15,
+              width: "auto",
+              borderRadius: "10px",
+              background: "#4C00FF",
+              color: "white",
+              cursor: "pointer",
+              border: "none",
+              textAlign: "center",
+            }}
           >
-            <i className="fa fa-search"></i>
-            Go
+            Search
           </button>
         </div>
       </div>

@@ -2,6 +2,7 @@ import React from "react";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
 const Doc = (docObj) => {
   //   const title = "e";
   const title = docObj.docObj._source.title;
@@ -57,12 +58,31 @@ const Resources = () => {
           <div
             style={{
               position: "absolute",
-              left: "35%",
+              left: "20%",
               top: "10%",
               fontSize: 20,
             }}
           >
-            <table style={{ width: "110%", textAlign: "center" }}>
+            <div>
+              <h3>All documentation</h3>
+              <ul>
+                {docs.map((doc) => {
+                  // console.log(doc);
+                  return <Doc docObj={doc} />;
+                })}
+              </ul>
+              <div
+                style={{
+                  position: "absolute",
+                  left: "140%",
+                  top: "15%",
+                  width: "400px",
+                }}
+              >
+                <img src="https://cdn1.iconfinder.com/data/icons/luchesa-2/128/Search_document-512.png"></img>
+              </div>
+            </div>
+            {/* <table style={{ width: "110%", textAlign: "center" }}>
               <tr>
                 <th>Documents</th>
               </tr>
@@ -76,21 +96,30 @@ const Resources = () => {
                   </tr>
                 );
               })}
-            </table>
+            </table> */}
             <br></br>
           </div>
           <button
             style={{
               position: "absolute",
-              left: "75%",
-              top: "10%",
+              left: "35%",
+              top: "12%",
               fontSize: 15,
+              width: "auto",
+              borderRadius: "10px",
+              background: "#4C00FF",
+              color: "white",
+              cursor: "pointer",
+              border: "none",
+              paddingBottom: "5px",
+              textAlign: "center",
+              padding: "10px 20px",
             }}
             onClick={() => {
               navigate(`/emp/resources/insert/`);
             }}
           >
-            Add New
+            Add New!
           </button>
         </>
       )}

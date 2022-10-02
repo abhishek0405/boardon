@@ -1,7 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
+import "../App.css";
 const DocumentForm = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
@@ -39,28 +41,60 @@ const DocumentForm = () => {
       <div
         style={{
           position: "absolute",
-          left: "45%",
+          left: "20%",
           top: "10%",
           fontSize: 20,
         }}
       >
         <form>
-          Title{" "}
+          <p></p>
           <input
             type="text"
             value={title}
             onChange={(event) => setTitle(event.target.value)}
+            style={{
+              border: "none",
+              fontSize: "30px",
+              width: "98%",
+            }}
+            placeholder="Blog Title.."
           ></input>
           <p></p>
-          Content :<p></p>
-          <textarea
-            rows="40"
-            cols="40"
-            value={body}
-            onChange={(event) => setBody(event.target.value)}
-          ></textarea>
+
+          <div className="editorBody" style={{ maxwidth: "80%" }}>
+            <CKEditor
+              editor={ClassicEditor}
+              data={body}
+              onReady={(editor) => {
+                console.log("Editor is ready to use!", editor);
+              }}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+
+                setBody(data);
+              }}
+            />
+          </div>
           <br></br>
-          <button type="submit" onClick={submitDocumentation}>
+          <button
+            type="submit"
+            onClick={submitDocumentation}
+            style={{
+              position: "absolute",
+              left: "100%",
+              top: "3%",
+              fontSize: 15,
+              width: "auto",
+              borderRadius: "10px",
+              background: "#4C00FF",
+              color: "white",
+              cursor: "pointer",
+              border: "none",
+              paddingBottom: "5px",
+              textAlign: "center",
+              padding: "10px 20px",
+            }}
+          >
             Publish
           </button>
         </form>

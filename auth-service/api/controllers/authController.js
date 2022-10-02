@@ -39,11 +39,11 @@ const userLoginController = (req, res) => {
           });
         } else {
           res.clearCookie("authToken");
-          return res.json("Invalid Credentials");
+          return res.json({status : "error",error : "Invalid Password"});
         }
       } else {
         res.clearCookie("authToken");
-        return res.json({ error: "Invalid Request" });
+        return res.json({ status : "error", error: "Invalid username" });
       }
     })
     .catch((err) => {
@@ -75,12 +75,14 @@ const companyRegisterController = async (req, res) => {
         companyEntity.save().then((newCompany) => {
           log.info(`Onboarded ${newCompany.cid} : ${newCompany.name}`);
           res.json({
+            status : 'successful',
             message: `Registered Succesfully`,
           });
         });
       } else {
         res.json({
-          error: `${req.body.name} is already registered`,
+          status : 'error',
+          error: 'Company already exists!',
         });
       }
     })
@@ -120,11 +122,11 @@ const companyLoginController = (req, res) => {
           });
         } else {
           res.clearCookie("authToken");
-          return res.json("Invalid Credentials");
+          return res.json({status : "error",error : "Invalid Password"});
         }
       } else {
         res.clearCookie("authToken");
-        return res.json({ error: "Invalid Request" });
+        return res.json({ status : "error",error: "Invalid username" });
       }
     })
     .catch((err) => {
@@ -132,9 +134,33 @@ const companyLoginController = (req, res) => {
     });
 };
 
+
+const logout = (req, res) => {
+  // if (req.session) {
+  //   req.session.destroy(err => {
+  //     if (err) {
+  //       res.json({status : "error",mag : 'Unable to log out'})
+  //     } else {
+  //       res.json({status : "success",msg : 'Logout successful'})
+  //     }
+  //   });
+  // } else {
+  //   res.end()
+  // }
+  console.log(req.cookies)
+  if(req.cookies.authToken){
+    res.clearCookie("authToken")
+    res.json({status : "success",msg : 'Logout successful'})
+  }
+  else{
+    res.json({status : "error",mag : 'Unable to log out'})
+  }
+}
+
 module.exports = {
   userLoginController,
   secretRouteController,
   companyRegisterController,
   companyLoginController,
+  logout
 };

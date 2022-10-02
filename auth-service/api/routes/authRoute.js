@@ -6,6 +6,7 @@ const {
   secretRouteController,
   companyRegisterController,
   companyLoginController,
+  logout
 } = require("../controllers/authController");
 const isEmployeeLoggedIn = require("../middleware/isEmployeeLoggedIn");
 const isCompanyLoggedIn = require("../middleware/isCompanyLoggedIn");
@@ -25,5 +26,8 @@ router.get("/user/isLoggedIn", isEmployeeLoggedIn, (req, res) => {
 router.get("/company/isLoggedIn", isCompanyLoggedIn, (req, res) => {
   res.json({ ...req.userData, Authenticated: true });
 });
+
+
+router.delete("/logout", logout);
 
 module.exports = router;

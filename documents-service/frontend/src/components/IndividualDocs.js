@@ -18,7 +18,8 @@ function IndividualDocs() {
   //searchParams.get("username")
 
   useEffect(() => {
-    fetch(window.location.href, {
+    //console.log(window.location.pathname)
+    fetch(window.location.pathname, {
       credentials: "include",
     })
       .then(
@@ -28,7 +29,6 @@ function IndividualDocs() {
         //console.log(response)}
       )
       .then((data) => {
-        console.log("test");
         setBackendData(data);
         setUsername(data.username);
       });

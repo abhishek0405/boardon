@@ -7,6 +7,7 @@ import axios from "axios";
 import bell_icon from "./bell_icon.png";
 import user_icon from "./user_icon.png";
 import message_icon from "./message_icon.png";
+import { useNavigate } from "react-router-dom";
 
 const customStyles = {
   content: {
@@ -30,6 +31,7 @@ Modal.setAppElement("#root");
 function HrDashboard() {
   let subtitle;
   const [modalIsOpen, setIsOpen] = React.useState(false);
+  const navigate = useNavigate();
 
   function openModal() {
     setIsOpen(true);
@@ -46,14 +48,19 @@ function HrDashboard() {
 
   //functions to handle submit
   const [docs, setDocs] = useState("");
-  const handleSubmit = async (e) => {
-    //e.preventDefault();
-    const docsToAdd = { docs };
 
-    console.log(docsToAdd);
+  const handleClick = async (e) => {
+    console.log("hellp");
     axios
-      .post("http://localhost:5000/hr/createChecklist", docsToAdd)
-      .then((res) => console.log(res.data))
+      .delete("http://localhost:3002/auth/logout", {
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data.status === "success") {
+          navigate("/");
+        }
+      })
       .catch((err) => console.log(err.response.data));
   };
 

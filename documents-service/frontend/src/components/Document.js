@@ -1,6 +1,7 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import parse from "html-react-parser";
 const Document = () => {
   const { id } = useParams();
   const [doc, setDoc] = useState(null);
@@ -30,18 +31,19 @@ const Document = () => {
             style={{
               maxWidth: "50%",
               position: "absolute",
-              left: "30%",
+              left: "25%",
               fontSize: 17,
             }}
           >
+            <p style={{ fontSize: "30px" }}>
+              <b> {doc._source.title}</b>
+            </p>
             <p></p>
-            Title : {doc._source.title}
+            <b>Author: </b> {doc._source.author}
             <p></p>
-            Author : {doc._source.author}
+            <b>Date :</b> {new Date(doc._source.date).toString()}
             <p></p>
-            Date : {new Date(doc._source.date).toString()}
-            <p></p>
-            Body : {doc._source.body}
+            {parse(doc._source.body)}
           </div>
         </div>
       )}
