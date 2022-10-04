@@ -107,7 +107,7 @@ function HrDashboard() {
         <nav class="nav">
           <ul>
             <li>
-              <a href={"/hr/hrDashboard"} className="nav_link">
+              <a href={"/hr/generateCredentials"} className="nav_link">
                 <ion-icon
                   name="chatbubbles-outline"
                   class="nav_icon"

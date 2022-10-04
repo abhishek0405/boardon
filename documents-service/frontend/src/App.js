@@ -12,6 +12,7 @@ import Resources from "./components/Resources";
 import Document from "./components/Document";
 import Result from "./components/SearchResults";
 import AddDocumentation from "./components/AddDocumentation";
+import GenerateCredentials from "./components/GenerateCredentials";
 function App() {
   return (
     <Router>
@@ -111,6 +112,16 @@ function App() {
               element={
                 <>
                   <EmpDashboard /> <AddDocumentation />
+                </>
+              }
+            ></Route>
+
+            <Route
+              exact
+              path="/hr/generateCredentials"
+              element={
+                <>
+                  <HrDashboard /> <GenerateCredentials />
                 </>
               }
             ></Route>

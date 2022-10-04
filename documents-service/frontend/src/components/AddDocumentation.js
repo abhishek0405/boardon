@@ -7,6 +7,7 @@ import "../App.css";
 const DocumentForm = () => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
+  const [editor, setEditor] = useState(null);
   const submitDocumentation = async (e) => {
     e.preventDefault();
     console.log(title);
@@ -60,13 +61,15 @@ const DocumentForm = () => {
             placeholder="Blog Title.."
           ></input>
           <p></p>
-
+          {editor === null || editor == undefined ? <>Oops..Loading</> : <></>}
           <div className="editorBody" style={{ maxwidth: "80%" }}>
             <CKEditor
               editor={ClassicEditor}
               data={body}
               onReady={(editor) => {
                 console.log("Editor is ready to use!", editor);
+                window.editor = editor;
+                setEditor(editor);
               }}
               onChange={(event, editor) => {
                 const data = editor.getData();
