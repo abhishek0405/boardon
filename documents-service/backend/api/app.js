@@ -10,7 +10,7 @@ const path = require('path');
 const fileUpload = require('express-fileupload');
 const cors = require('cors')
 //app.use(express.json());
-
+require("dotenv").config();
 app.use(express.static(path.join(__dirname, "public")));
 
 //app.use(cors());
@@ -36,10 +36,9 @@ app.use((req, res, next) => {
   return next();
 });
 
-
 const docsRoutesHR = require("./routes/docsRoutesHR");
 const docsRoutesEmp = require("./routes/docsRoutesEmp");
-
+app.use(cookieParser());
 app.use("/hr", docsRoutesHR);
 app.use("/emp", docsRoutesEmp);
 

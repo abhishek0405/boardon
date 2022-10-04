@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-require('dotenv').config()
+require("dotenv").config();
 const config = require("../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 const cookieParser = require("cookie-parser");

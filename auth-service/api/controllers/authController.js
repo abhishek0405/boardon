@@ -93,14 +93,10 @@ const companyRegisterController = async (req, res) => {
 };
 
 const companyLoginController = (req, res) => {
-  log.info("hello")
   const username = req.body.name;
-  log.info(username)
   const password = req.body.password;
   Company.find({ name: username })
     .then(async (foundCompany) => {
-      log.info("helll")
-      log.info(foundCompany)
       if (foundCompany.length == 1) {
         const dbPassword = foundCompany[0].password;
         const passwordMatchFlag = await bcrypt.compare(password, dbPassword);

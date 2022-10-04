@@ -24,6 +24,4 @@ router.post('/uploadDocs',
 
 //router.post('/updateDocs', updateDocs);
 
-  
-
 module.exports = router;

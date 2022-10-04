@@ -81,6 +81,7 @@
                     <form action="/hr/postComment" method="post">
                         <input type="text" id="comment" name="comment" />
                         <input type="text" name="<%- arr[i] %>" value="<%- arr[i] %>" hidden/>
+                        <input type="text" name ="username" value = "<%-username %>"  hidden/>
                         <input type="submit" value="Post" />
                     </form>
                 </td>
