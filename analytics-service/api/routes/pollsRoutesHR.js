@@ -6,8 +6,8 @@ const config = require("../config")[process.env.NODE_ENV || "development"];
 const isCompanyLoggedIn = require("../middleware/isCompanyLoggedIn");
 const log = config.log();
 const {
-  hrDashboard,
-  getPolls,
+  allHrPolls,
+  
   createPoll,
   getIndividualPoll,
   addQuestion,
@@ -16,8 +16,8 @@ const {
 } = require("../controllers/pollsControllerHR");
 log.info("hi");
 
-router.get("/hrDashboard", isCompanyLoggedIn, hrDashboard);
-router.get("/polls", isCompanyLoggedIn, getPolls);
+router.get("/allPolls", isCompanyLoggedIn, allHrPolls);
+
 router.post("/createPoll", isCompanyLoggedIn, createPoll);
 router.get("/:cid/:pollId", isCompanyLoggedIn, getIndividualPoll);
 router.post("/addQuestion", isCompanyLoggedIn, addQuestion);

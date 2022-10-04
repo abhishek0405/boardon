@@ -203,7 +203,7 @@ function Navbar () {
                 
                 <div className='login-modal'>
                     
-                <button className="blue-btn" style={{position : 'absolute', left : "94%", top : "3%"}} onClick={openModalOne}>Login</button>
+                <button className="blue-btn" style={{position : 'absolute', left : "94%", top : "30%"}} onClick={openModalOne}>Login</button>
                 <Modal
                     isOpen={modalOneIsOpen}
                     onAfterOpen={afterOpenModal}
@@ -276,7 +276,7 @@ function Navbar () {
                 
                 <div className='get-started-modal'>
 
-                <button className="blue-btn" style={{position : 'absolute', left : "85%", top : "3%"}} onClick={openModalTwo}>Get started</button>
+                <button className="blue-btn" style={{position : 'absolute', left : "85%", top : "30%"}} onClick={openModalTwo}>Get started</button>
 
                 
                 <Modal

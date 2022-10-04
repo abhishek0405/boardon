@@ -75,14 +75,25 @@ function EmpDashboard () {
                 
             <div className="blue-btn" style={{backgroundColor: '#B3FF00', top : 25, fontSize : 24, fontFamily : 'Arial', color : 'black'}}>BoardOn</div>
 
-            <div className="search" style={{left : '15%', top : '4%'}}>
+            <div className="search" style={{left : '15%', top : '40%'}}>
                 <input type="text" className="searchTerm" placeholder="What are you looking for?" />
                 {/* <button type="submit" className="searchButton">
                     <i className="fa fa-search"></i>
                 </button> */}
             </div>
+
+            <img src={user_icon} alt="bell" style={{position : 'absolute', top : '35%',left : '95%', width : '30px', height : '30px'}} onClick={handleClick} /> 
+            
+            
+            
+            <img src={bell_icon} alt="bell" style={{position : 'absolute', top : '35%',left : '91%', width : '30px', height : '30px'}} />
+           
+            <img src={message_icon} alt="bell" style={{position : 'absolute', top : '34.5%',left : '87%', width : '40px', height : '40px'}}  />
             
             </div>
+
+            
+            
 
 
             
@@ -97,7 +108,7 @@ function EmpDashboard () {
             
             </ul> */}
 
-            <div class="container" id="navbar">
+            <div class="container" id="navbar" style={{top : '10%'}}>
                 <nav class="nav">
                 
                 <ul>
@@ -117,13 +128,20 @@ function EmpDashboard () {
                     </a>)}
                     
                     </li>
-                    
+
+
                     <li>
-                    <a href="#" class="nav_link">
-                        <ion-icon name="people-outline" class="nav_icon"></ion-icon>
+                    {(window.location.href.split('?')[0] === 'http://localhost:3000/emp/viewPolls') ? (<a href={"/emp/viewPolls"} className="nav_link active">
+                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
                         <span class="nav_name" style={{fontSize : 16}}>Polls</span>
-                    </a>
+                    </a>) : (<a href={"/emp/viewPolls"} className="nav_link">
+                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
+                        <span class="nav_name" style={{fontSize : 16}}>Polls</span>
+                    </a>)}
+                    
                     </li>
+                    
+                    
                     
                     <li>
                     <a href="#" class="nav_link">
@@ -136,11 +154,6 @@ function EmpDashboard () {
                 </nav>
             </div>
             
-            <img src={user_icon} alt="bell" style={{position : 'absolute', top : '4%',left : '95%', width : '30px', height : '30px'}} onClick={handleClick} />
-            <img src={bell_icon} alt="bell" style={{position : 'absolute', top : '4%',left : '91%', width : '30px', height : '30px'}} />
-           
-            <img src={message_icon} alt="bell" style={{position : 'absolute', top : '3.5%',left : '87%', width : '40px', height : '40px'}} />
-
            
            
         </div>

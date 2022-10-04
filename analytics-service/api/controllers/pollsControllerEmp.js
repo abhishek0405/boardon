@@ -4,8 +4,8 @@ const Docs = require("../models/docs");
 const multer = require("multer");
 const Company = require("../models/company");
 const Employee = require("../models/employee");
-const Comments = require("../../../documents-service/api/models/comments");
-const Polls = require("../../../analytics-service/api/models/polls");
+const Comments = require("../models/comments");
+const Polls = require("../models/polls");
 //const fileUpload = multer();
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
@@ -17,6 +17,7 @@ const log = config.log();
 
 viewPolls = async (req, res) => {
   const username = req.userData.username;
+  console.log("heyy")
   console.log(username);
   let currEmp = await Employee.findOne({
     username: username,
@@ -26,7 +27,7 @@ viewPolls = async (req, res) => {
     currPolls = await Polls.find({ cid: currEmp.cid, posted: "yes" });
   }
 
-  res.render("viewPolls", { arr: currPolls });
+  res.json({ arr: currPolls });
 };
 
 getIndividualPoll = async (req, res) => {
@@ -39,14 +40,15 @@ getIndividualPoll = async (req, res) => {
     currPoll = {};
   }
 
-  res.render("viewIndividualPollEmp", { currPoll: currPoll });
+  res.json({ currPoll: currPoll });
 };
 
 submitPoll = async (req, res) => {
+  console.log(req.body)
   //log.info(req.body)
   let currPoll;
   currPoll = await Polls.findOne({
-    cid: req.body.cid,
+    cid: req.userData.cid,
     pollId: req.body.pollId,
   });
   if (currPoll === null) {
@@ -58,15 +60,15 @@ submitPoll = async (req, res) => {
   f = 0;
 
   //change this later
+  for(var i = 0; i < currPoll.questions.length; i++){
+    ans.push(req.body[currPoll.questions[i].qs])
+  }
+  console.log("here are the answers")
+  console.log(ans)
+  
   if (currPoll.responses.length === 0) {
-    for (var prop in req.body) {
-      if (prop != "cid" && prop != "pollId") {
-        log.info(req.body[prop]);
-        ans.push(req.body[prop]);
-      }
-    }
-
-    //n.answers = ans
+    
+    
 
     currPoll.responses.push({
       username: req.userData.username,
@@ -76,12 +78,7 @@ submitPoll = async (req, res) => {
   } else {
     for (var i = 0; i < currPoll.responses.length; i++) {
       if (currPoll.responses[i].username === req.userData.username) {
-        for (var prop in req.body) {
-          if (prop != "cid" && prop != "pollId") {
-            log.info(req.body[prop]);
-            ans.push(req.body[prop]);
-          }
-        }
+        
 
         currPoll.responses[i].answers = ans;
 
@@ -93,7 +90,16 @@ submitPoll = async (req, res) => {
     }
   }
 
-  res.redirect("/emp/viewPolls");
+  
+  currPoll = await Polls.findOne({
+    cid: req.userData.cid,
+    pollId: req.body.pollId,
+  });
+  if (currPoll === null) {
+    currPoll = {};
+  }
+
+  res.json({ currPoll: currPoll });
 };
 
 module.exports = {
