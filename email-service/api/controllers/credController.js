@@ -24,13 +24,15 @@ async function isEmailValid(email) {
   return emailValidator.validate(email);
 }
 
-sendCredentailsToUser = async (employee) => {
+sendCredentailsToUser = async (employee, req) => {
   const receiver = employee.email;
-  const company = employee.company;
+  const company = req.userData.name;
   const firstName = employee.firstname;
   const lastName = employee.lastname;
   const phone = employee.Phone;
-  const newEmail = firstName + "." + lastName + "@" + company + ".com";
+  const domain = req.userData.domain;
+  const cid = req.userData.cid;
+  const newEmail = firstName + "." + lastName + "@" + domain;
 
   if (
     receiver == null ||
@@ -56,7 +58,7 @@ sendCredentailsToUser = async (employee) => {
 
   const credentialsBody = `Email : ${newEmail},
                            Password :${password} `;
-
+  // return res.json("hit");
   Employee.find({ email: receiver })
     .exec()
     .then(async (foundUsers) => {
@@ -69,7 +71,7 @@ sendCredentailsToUser = async (employee) => {
               const hashedPassword = await bcrypt.hash(password, 10);
               const employeeObj = {
                 //change the Ids,maybe random generate
-                cid: 1,
+                cid: cid,
                 eid: eid,
                 name: firstName + " " + lastName,
                 dob: "02/11/2001",
@@ -186,7 +188,7 @@ generateCredentialsFromExcel = (req, res) => {
     );
     responseList = [];
     for (employee of updatedEmployeeList) {
-      var response = sendCredentailsToUser(employee);
+      var response = sendCredentailsToUser(employee, req);
       responseList.push(response);
     }
 

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <form action="/emp/submitPoll" method="post">
+        <input type="text" name="pollId" value="<%- currPoll.pollId %>" hidden />
+        <input type="text" name="cid" value="<%- currPoll.cid %>" hidden />
+
+    <% for(var i = 0; i < currPoll.questions.length; i++){ %>
+
+        <strong><%= currPoll.questions[i].qs %></strong>
+        <br>
+
+        <% for(var j = 0; j < currPoll.questions[i].opt.length; j++){ %>
+
+        <input type="radio" id="<%- currPoll.questions[i].opt[j] %>" name="ques<%- i %>" value="<%- currPoll.questions[i].opt[j] %>">
+        <label for="<%- currPoll.questions[i].opt[j] %>"><%= currPoll.questions[i].opt[j] %></label><br>
+        
+
+        <% } %>
+        
+        <br><br>
+
+    <% } %>
+    <br><br>
+    <input type="submit" value="Submit poll" />
+</form>
+</body>
+</html>

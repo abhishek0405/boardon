@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>HR Dashboard</h1>
+
+    <a href="/hr/getDocs">View all employees</a>
+    <br><br>
+    <a href="/hr/polls">Polls</a>
+
+    <h3>Checklist:</h3>
+
+
+    <table>
+        <%  for(var i = 0; i < arr.length; i++){ %>
+
+            <tr>
+                <td><%= arr[i] %></td>
+            </tr>
+
+        <% } %>
+    </table>
+
+    <br><br>
+    <form action="/hr/createChecklist" method="post">
+
+        <label for="docsNames">Enter names of docs required (space seaparted). We'll create a checklist for you</label>
+        <input type="text" id="docs" name="docs" placeholder="space-separated doc names" />
+        <br><br>
+        <input type="submit" value="Submit" />
+    </form>
+
+
+    <br><br><br>
+
+    <div class="container">
+        <h2>Create poll</h2>
+        <!-- Trigger the modal with a button -->
+        <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Open Modal</button>
+      
+        <!-- Modal -->
+        <div class="modal fade" id="myModal" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Create a poll</h4>
+              </div>
+              <div class="modal-body">
+                <form action="/hr/createPoll" method="post">
+                    <input type="text" name="pollName" id="pollName" />
+                    <input type="submit" value="Create" />
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+
+      <br><br><br>
+      <h3>Current polls: </h3>
+
+
+  
+      
+   
+</body>
+</html>

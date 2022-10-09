@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td, th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>hello welcome to emp dashboard</h1>
+    <br><br>
+
+    <a href="/emp/viewPolls">View polls</a>
+
+    <h3>Checklist:</h3>
+
+    <table>
+        <%  for(var i = 0; i < arr.length; i++){ %>
+
+            <tr>
+                <td><%= arr[i] %></td>
+                <td>
+                    <form action="/emp/uploadDocs" method="post" enctype="multipart/form-data">
+                        <input type="file" id="<%- arr[i] %>" name="file"/>
+                        <input type="text" name="<%- arr[i] %>" value="<%- arr[i] %>" hidden/>
+                        <input type="submit" value="Confirm upload" />
+                    </form>
+                </td>
+                <td>
+                    <% if(arr[i] in docsCurr){ %>
+                    <a href="<%- docsCurr[arr[i]] %>" target="_blank">View</a>
+                    <% } %>
+                </td>
+
+                <td>
+                    <% if(arr[i] in commCurr){ %>
+
+                        <%= commCurr[arr[i]] %>
+                    <% } %>
+                </td>
+
+                
+
+            </tr>
+
+        <% } %>
+    </table>
+    
+</body>
+</html>
