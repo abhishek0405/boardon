@@ -11,7 +11,6 @@ const {
   getIndividualPoll,
   submitPoll,
 } = require("../controllers/pollsControllerEmp");
-const app = require("../app");
 
 router.get("/viewPolls", isEmployeeLoggedIn, viewPolls);
 router.get("/:cid/:pollId", isEmployeeLoggedIn, getIndividualPoll);
