@@ -5,7 +5,7 @@ const http = require("http");
 const config = require("../config")[process.env.NODE_ENV || "development"];
 
 const log = config.log();
-const service = require("../api/app");
+const service = require("../index");
 
 const server = http.createServer(service);
 // console.log(process.env.MONGOURL)

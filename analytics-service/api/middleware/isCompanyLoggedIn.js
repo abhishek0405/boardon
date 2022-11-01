@@ -3,7 +3,7 @@ const authUrl = process.env.AUTH_SERVICE || "http://localhost:3002";
 const isLoggedIn = async (req, res, next) => {
   try {
     const authToken = req.cookies.authToken;
-    //console.log(authToken);
+    console.log(authToken);
     const response = await axios.get(`${authUrl}/auth/company/isLoggedIn`, {
       headers: {
         Cookie: `authToken=${authToken};`,
