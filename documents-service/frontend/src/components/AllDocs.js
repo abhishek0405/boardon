@@ -23,7 +23,7 @@ function AllDocs() {
   return (
     <div
       className="AllDocs"
-      style={{ position: "absolute", top: "12%", left: "20%" }}
+      style={{ position: "absolute", top: "12%", left: "25%" }}
     >
       <h1 style={{ color: "#4C00FF" }}>All employees</h1>
 
@@ -34,14 +34,12 @@ function AllDocs() {
           {" "}
           <table style={{ width: "150%" }}>
             <tr>
-              <th>Eid</th>
               <th>Name</th>
               <th>Username</th>
             </tr>
             {backendData.allEmp.map((d) => {
               return (
                 <tr key={d.eid}>
-                  <td>{d.eid}</td>
                   <td>{d.name}</td>
                   <td>{d.username}</td>
                   <td>

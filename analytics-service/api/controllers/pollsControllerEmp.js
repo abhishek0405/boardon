@@ -17,6 +17,7 @@ const log = config.log();
 
 viewPolls = async (req, res) => {
   const username = req.userData.username;
+  console.log("heyy");
   console.log(username);
   let currEmp = await Employee.findOne({
     username: username,
@@ -26,7 +27,7 @@ viewPolls = async (req, res) => {
     currPolls = await Polls.find({ cid: currEmp.cid, posted: "yes" });
   }
 
-  res.render("viewPolls", { arr: currPolls });
+  res.json({ arr: currPolls });
 };
 
 getIndividualPoll = async (req, res) => {
@@ -39,15 +40,17 @@ getIndividualPoll = async (req, res) => {
     currPoll = {};
   }
 
-  res.render("viewIndividualPollEmp", { currPoll: currPoll });
+  res.json({ currPoll: currPoll });
 };
 
 submitPoll = async (req, res) => {
+  console.log(req.body);
+  console.log(req.userData.username);
   //log.info(req.body)
   let currPoll;
   currPoll = await Polls.findOne({
-    cid: req.body.cid,
-    pollId: req.body.pollId,
+    cid: req.userData.cid,
+    pollId: parseInt(req.body.pollId),
   });
   if (currPoll === null) {
     currPoll = {};
@@ -58,31 +61,22 @@ submitPoll = async (req, res) => {
   f = 0;
 
   //change this later
+  for (var i = 0; i < currPoll.questions.length; i++) {
+    ans.push(req.body[currPoll.questions[i].qs]);
+  }
+  console.log("here are the answers");
+  console.log(ans);
+
   if (currPoll.responses.length === 0) {
-    for (var prop in req.body) {
-      if (prop != "cid" && prop != "pollId") {
-        log.info(req.body[prop]);
-        ans.push(req.body[prop]);
-      }
-    }
-
-    //n.answers = ans
-
     currPoll.responses.push({
       username: req.userData.username,
       answers: ans,
     });
     await currPoll.save();
   } else {
+    console.log("yo");
     for (var i = 0; i < currPoll.responses.length; i++) {
       if (currPoll.responses[i].username === req.userData.username) {
-        for (var prop in req.body) {
-          if (prop != "cid" && prop != "pollId") {
-            log.info(req.body[prop]);
-            ans.push(req.body[prop]);
-          }
-        }
-
         currPoll.responses[i].answers = ans;
 
         //currPoll.responses.push(n)
@@ -93,7 +87,24 @@ submitPoll = async (req, res) => {
     }
   }
 
-  res.redirect("/emp/viewPolls");
+  if (f === 0) {
+    console.log("yooo");
+    currPoll.responses.push({
+      username: req.userData.username,
+      answers: ans,
+    });
+    await currPoll.save();
+  }
+
+  currPoll = await Polls.findOne({
+    cid: req.userData.cid,
+    pollId: req.body.pollId,
+  });
+  if (currPoll === null) {
+    currPoll = {};
+  }
+
+  res.json({ currPoll: currPoll });
 };
 
 module.exports = {

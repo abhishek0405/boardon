@@ -61,13 +61,14 @@ const DocumentForm = () => {
             placeholder="Blog Title.."
           ></input>
           <p></p>
-          {editor === null || editor == undefined ? <>Oops..Loading</> : <></>}
+          {editor === null || editor == undefined ? <>Oopss..Loading</> : <></>}
           <div className="editorBody" style={{ maxwidth: "80%" }}>
             <CKEditor
               editor={ClassicEditor}
               data={body}
               onReady={(editor) => {
-                console.log("Editor is ready to use!", editor);
+                console.log("Editor is ready to us!", editor);
+                console.log(editor._context);
                 window.editor = editor;
                 setEditor(editor);
               }}

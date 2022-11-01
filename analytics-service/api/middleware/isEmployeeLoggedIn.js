@@ -3,7 +3,7 @@ const axios = require("axios");
 const isLoggedIn = async (req, res, next) => {
   try {
     const authToken = req.cookies.authToken;
-    console.log(authToken);
+    //console.log(authToken);
     const response = await axios.get(
       `http://localhost:3002/auth/user/isLoggedIn`,
       {
