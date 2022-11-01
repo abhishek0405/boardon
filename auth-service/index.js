@@ -1,16 +1,16 @@
 const express = require("express");
 const app = express();
 require("dotenv").config();
-const config = require("../config")[process.env.NODE_ENV || "development"];
+const config = require("./config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 const cookieParser = require("cookie-parser");
-const cors = require('cors')
-app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
+const cors = require("cors");
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-const authRoutes = require("../api/routes/authRoute");
-const connectDB = require("../config/db");
+const authRoutes = require("./api/routes/authRoute");
+const connectDB = require("./config/db");
 connectDB();
 /*
 
