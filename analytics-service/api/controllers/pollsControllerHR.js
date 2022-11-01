@@ -5,7 +5,7 @@ const Docs = require("../models/docs");
 const Employee = require("../models/employee");
 const Comments = require("../models/comments");
 const Polls = require("../models/polls");
-const { ObjectId } = require('mongodb');
+const { ObjectId } = require("mongodb");
 
 var services = {};
 
@@ -38,13 +38,11 @@ allHrPolls = async (req, res) => {
   currPolls = await Polls.find({ cid: cid });
 
   res.json({
-    cid : req.userData.cid,
-    arr : currPolls
-  })
+    cid: req.userData.cid,
+    arr: currPolls,
+  });
   //res.render("hrDashboard", { arr: arr, arr1: currPolls });
 };
-
- 
 
 createPoll = async (req, res) => {
   log.info("creating poll");
@@ -65,7 +63,6 @@ createPoll = async (req, res) => {
   let newPoll = new Polls(n);
   await newPoll.save();
 
-
   let curr;
   curr = await Company.findOne({ cid: cid });
 
@@ -85,19 +82,19 @@ createPoll = async (req, res) => {
   currPolls = await Polls.find({ cid: cid });
 
   res.json({
-    cid : req.userData.cid,
-    arr : currPolls
-  })
+    cid: req.userData.cid,
+    arr: currPolls,
+  });
 };
 
 getIndividualPoll = async (req, res) => {
-  console.log("hey")
-  console.log(req.params.cid)
+  console.log("hey");
+  console.log(req.params.cid);
   let currPoll = await Polls.findOne({
     cid: ObjectId(req.params.cid),
     pollId: req.params.pollId,
   });
-  console.log(currPoll)
+  console.log(currPoll);
   let arr;
   if (currPoll.questions.length != 0 && currPoll.questions[0].qs !== "") {
     arr = currPoll.questions;
@@ -105,17 +102,17 @@ getIndividualPoll = async (req, res) => {
     arr = [];
   }
 
-  res.json( {
+  res.json({
     currPoll: req.params.pollId,
     currCompany: req.params.cid,
     arr: arr,
-    status : currPoll.posted,
-    msg : "success"
+    status: currPoll.posted,
+    msg: "success",
   });
 };
 
 addQuestion = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   let currentPoll = await Polls.findOne({
     cid: req.userData.cid,
     pollId: parseInt(req.body.pollId),
@@ -139,7 +136,6 @@ addQuestion = async (req, res) => {
   });
   await currentPoll.save();
 
-  
   let arr;
   if (currentPoll.questions.length != 0 && currentPoll.questions[0].qs !== "") {
     arr = currentPoll.questions;
@@ -147,32 +143,24 @@ addQuestion = async (req, res) => {
     arr = [];
   }
 
-  res.json( {
+  res.json({
     currPoll: parseInt(req.body.pollId),
     currCompany: req.userData.cid,
     arr: arr,
-    
   });
-  
-  
 };
 
 postPoll = async (req, res) => {
-  console.log("yesiii")
+  console.log("yesiii");
   let currentPoll = await Polls.findOne({
     cid: req.userData.cid,
     pollId: parseInt(req.body.pollId),
   });
-  if(req.body.status === 'yes')
-    currentPoll.posted = "yes";
-  else
-    currentPoll.posted = "no";
+  if (req.body.status === "yes") currentPoll.posted = "yes";
+  else currentPoll.posted = "no";
 
   await currentPoll.save();
-  
 
-  
-  
   let arr;
   if (currentPoll.questions.length != 0 && currentPoll.questions[0].qs !== "") {
     arr = currentPoll.questions;
@@ -180,44 +168,40 @@ postPoll = async (req, res) => {
     arr = [];
   }
 
-  res.json( {
+  res.json({
     currPoll: req.body.pollId,
     currCompany: req.userData.cid,
     arr: arr,
-    status : currPoll.posted,
-    msg : "success"
+    status: currentPoll.posted,
+    msg: "success",
   });
 };
-  //res.redirect("/hr/hrDashboard");
-
+//res.redirect("/hr/hrDashboard");
 
 viewAllresults = async (req, res) => {
-  console.log("hellooo")
-  console.log(req.query)
-  const cid = ObjectId(req.userData.cid)
-  var pid = 1
-  if(('poll' in req.query) && req.query.poll !== '')
-    pid = parseInt(req.query.poll)
-  
-  console.log(pid)
-  
-  
-  let requiredPoll = await Polls.findOne({ cid: cid, pollId : pid});
-  console.log(requiredPoll)
+  console.log("hellooo");
+  console.log(req.query);
+  const cid = ObjectId(req.userData.cid);
+  var pid = 1;
+  if ("poll" in req.query && req.query.poll !== "")
+    pid = parseInt(req.query.poll);
 
-  let allCharts = []
-  let questions = []
-  
-  
+  console.log(pid);
+
+  let requiredPoll = await Polls.findOne({ cid: cid, pollId: pid });
+  console.log(requiredPoll);
+
+  let allCharts = [];
+  let questions = [];
+
   //for every question in given poll, generate pie chart
-  for(var i = 0; i < requiredPoll.questions.length; i++){
+  for (var i = 0; i < requiredPoll.questions.length; i++) {
+    var copts = [];
+    questions.push(requiredPoll.questions[i].qs);
 
-    var copts = []
-    questions.push(requiredPoll.questions[i].qs)
-    
-    var opts = requiredPoll.questions[i].opt
-    var resp = requiredPoll.responses
-    var chartValues = {}
+    var opts = requiredPoll.questions[i].opt;
+    var resp = requiredPoll.responses;
+    var chartValues = {};
     for (var j = 0; j < opts.length; j++) {
       chartValues[opts[j]] = 0;
     }
@@ -225,28 +209,28 @@ viewAllresults = async (req, res) => {
     for (var j = 0; j < resp.length; j++) {
       chartValues[resp[j].answers[i]] += 1;
     }
-    
+
     for (const key of Object.keys(chartValues)) {
-      var x = {name : key, value : chartValues[key]}
-      copts.push(x)
-
+      var x = { name: key, value: chartValues[key] };
+      copts.push(x);
     }
-    allCharts.push(copts)
-
+    allCharts.push(copts);
   }
 
-  console.log(allCharts)
+  console.log(allCharts);
 
-  
   let currPolls = await Polls.find({ cid: cid });
-  
-  
-  res.json({ allCharts : allCharts, questions : questions, currPolls : currPolls });
+
+  res.json({
+    allCharts: allCharts,
+    questions: questions,
+    currPolls: currPolls,
+  });
 };
 
 module.exports = {
   allHrPolls,
-  
+
   createPoll,
   getIndividualPoll,
   addQuestion,

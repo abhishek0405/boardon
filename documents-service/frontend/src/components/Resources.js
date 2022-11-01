@@ -102,7 +102,7 @@ const Resources = () => {
           <button
             style={{
               position: "absolute",
-              left: "35%",
+              left: "45%",
               top: "12%",
               fontSize: 15,
               width: "auto",

@@ -17,7 +17,7 @@ const log = config.log();
 
 viewPolls = async (req, res) => {
   const username = req.userData.username;
-  console.log("heyy")
+  console.log("heyy");
   console.log(username);
   let currEmp = await Employee.findOne({
     username: username,
@@ -44,12 +44,13 @@ getIndividualPoll = async (req, res) => {
 };
 
 submitPoll = async (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
+  console.log(req.userData.username);
   //log.info(req.body)
   let currPoll;
   currPoll = await Polls.findOne({
     cid: req.userData.cid,
-    pollId: req.body.pollId,
+    pollId: parseInt(req.body.pollId),
   });
   if (currPoll === null) {
     currPoll = {};
@@ -60,26 +61,22 @@ submitPoll = async (req, res) => {
   f = 0;
 
   //change this later
-  for(var i = 0; i < currPoll.questions.length; i++){
-    ans.push(req.body[currPoll.questions[i].qs])
+  for (var i = 0; i < currPoll.questions.length; i++) {
+    ans.push(req.body[currPoll.questions[i].qs]);
   }
-  console.log("here are the answers")
-  console.log(ans)
-  
-  if (currPoll.responses.length === 0) {
-    
-    
+  console.log("here are the answers");
+  console.log(ans);
 
+  if (currPoll.responses.length === 0) {
     currPoll.responses.push({
       username: req.userData.username,
       answers: ans,
     });
     await currPoll.save();
   } else {
+    console.log("yo");
     for (var i = 0; i < currPoll.responses.length; i++) {
       if (currPoll.responses[i].username === req.userData.username) {
-        
-
         currPoll.responses[i].answers = ans;
 
         //currPoll.responses.push(n)
@@ -90,7 +87,15 @@ submitPoll = async (req, res) => {
     }
   }
 
-  
+  if (f === 0) {
+    console.log("yooo");
+    currPoll.responses.push({
+      username: req.userData.username,
+      answers: ans,
+    });
+    await currPoll.save();
+  }
+
   currPoll = await Polls.findOne({
     cid: req.userData.cid,
     pollId: req.body.pollId,

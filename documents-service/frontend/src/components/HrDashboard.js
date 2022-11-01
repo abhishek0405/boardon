@@ -45,13 +45,11 @@ function HrDashboard() {
   function closeModal() {
     setIsOpen(false);
   }
-  
 
   //functions to handle submit
   const [docs, setDocs] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
 
-  
   const handleGoSubmit = async () => {
     if (searchQuery !== "") {
       navigate(`/emp/resources/search/${searchQuery}`);
@@ -89,8 +87,7 @@ function HrDashboard() {
           BoardOn
         </div>
 
-            
-        <div className="search" style={{ left: "15%", top: "4%" }}>
+        <div className="search" style={{ left: "15%", top: "40%" }}>
           <input
             type="text"
             className="searchTerm"
@@ -117,89 +114,233 @@ function HrDashboard() {
             Search
           </button>
         </div>
-            <img src={user_icon} alt="bell" style={{position : 'absolute', top : '35%',left : '95%', width : '30px', height : '30px'}} onClick={handleClick} /> 
-            
-            
-            
-            <img src={bell_icon} alt="bell" style={{position : 'absolute', top : '35%',left : '91%', width : '30px', height : '30px'}} />
-           
-            <img src={message_icon} alt="bell" style={{position : 'absolute', top : '34.5%',left : '87%', width : '40px', height : '40px'}}  />
+        <img
+          src={user_icon}
+          alt="bell"
+          style={{
+            position: "absolute",
+            top: "35%",
+            left: "95%",
+            width: "30px",
+            height: "30px",
+          }}
+          onClick={handleClick}
+        />
 
-            
-            </div>
+        <img
+          src={bell_icon}
+          alt="bell"
+          style={{
+            position: "absolute",
+            top: "35%",
+            left: "91%",
+            width: "30px",
+            height: "30px",
+          }}
+        />
 
+        <img
+          src={message_icon}
+          alt="bell"
+          style={{
+            position: "absolute",
+            top: "34.5%",
+            left: "87%",
+            width: "40px",
+            height: "40px",
+          }}
+        />
+      </div>
 
+      <div class="container" id="navbar" style={{ top: "10%" }}>
+        <nav class="nav">
+          <ul>
+            <li>
+              {window.location.href.split("?")[0] ===
+              "http://localhost:3000/hr/generateCredentials" ? (
+                <a href={"/hr/generateCredentials"} className="nav_link active">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Credentials
+                  </span>
+                </a>
+              ) : (
+                <a href={"/hr/generateCredentials"} className="nav_link">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Credentials
+                  </span>
+                </a>
+              )}
+            </li>
 
-            
+            <li>
+              {window.location.href.split("?")[0] ===
+              "http://localhost:3000/hr/hrDashboard" ? (
+                <a href={"/hr/hrDashboard"} className="nav_link active">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Checklist
+                  </span>
+                </a>
+              ) : (
+                <a href={"/hr/hrDashboard"} className="nav_link">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Checklist
+                  </span>
+                </a>
+              )}
+            </li>
 
-            <div class="container" id="navbar" style={{top : '10%'}}>
-                <nav class="nav">
-                
-                <ul>
-                    <li>
-                    <a href={"/hr/hrDashboard"} className="nav_link">
-                    <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span className="nav_name" style={{fontSize : 16}}>Credentials</span>
-                    </a>
-                    </li>
-                    <li>
-                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/hrDashboard') ? (<a href={"/hr/hrDashboard"} className="nav_link active">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Checklist</span>
-                    </a>) : (<a href={"/hr/hrDashboard"} className="nav_link">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Checklist</span>
-                    </a>)}
-                    
-                    </li>
-                    
-                    <li>
-                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/getDocs') ? (<a href={"/hr/getDocs"} className="nav_link active">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>All employees</span>
-                    </a>) : (<a href={"/hr/getDocs"} className="nav_link">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>All employees</span>
-                    </a>)}
-                    </li>
-                    <li>
-                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/allPolls') ? (<a href={"/hr/allPolls"} className="nav_link active">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Polls</span>
-                    </a>) : (<a href={"/hr/allPolls"} className="nav_link">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Polls</span>
-                    </a>)}
-                    </li>
-                    <li>
-                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/viewAllresults' ) ? (<a href={"/hr/viewAllresults"} className="nav_link active">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Polls Dashboard</span>
-                    </a>) : (<a href={"/hr/viewAllresults"} className="nav_link">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Polls Dashboard</span>
-                    </a>)}
-                    </li>
-                    <li>
-                    {(window.location.href.split('?')[0] === 'http://localhost:3000/hr/resources' ) ? (<a href={"/hr/resources"} className="nav_link active">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Resources</span>
-                    </a>) : (<a href={"/hr/resources"} className="nav_link">
-                        <ion-icon name="chatbubbles-outline" class="nav_icon"></ion-icon>
-                        <span class="nav_name" style={{fontSize : 16}}>Resources</span>
-                    </a>)}
-                    </li>
-                </ul>
-                
-                </nav>
-            </div>
-            
-            
-           
-           
-        </div>
-    );
+            <li>
+              {window.location.href.split("?")[0] ===
+              "http://localhost:3000/hr/getDocs" ? (
+                <a href={"/hr/getDocs"} className="nav_link active">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    All employees
+                  </span>
+                </a>
+              ) : (
+                <a href={"/hr/getDocs"} className="nav_link">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    All employees
+                  </span>
+                </a>
+              )}
+            </li>
+            <li>
+              {window.location.href.split("?")[0] ===
+              "http://localhost:3000/hr/allPolls" ? (
+                <a href={"/hr/allPolls"} className="nav_link active">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Polls
+                  </span>
+                </a>
+              ) : (
+                <a href={"/hr/allPolls"} className="nav_link">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Polls
+                  </span>
+                </a>
+              )}
+            </li>
+            <li>
+              {window.location.href.split("?")[0] ===
+              "http://localhost:3000/hr/viewAllresults" ? (
+                <a href={"/hr/viewAllresults"} className="nav_link active">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Polls Dashboard
+                  </span>
+                </a>
+              ) : (
+                <a href={"/hr/viewAllresults"} className="nav_link">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Polls Dashboard
+                  </span>
+                </a>
+              )}
+            </li>
+            <li>
+              {window.location.href.split("?")[0] ===
+              "http://localhost:3000/hr/resources" ? (
+                <a href={"/hr/resources"} className="nav_link active">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Resources
+                  </span>
+                </a>
+              ) : (
+                <a href={"/hr/resources"} className="nav_link">
+                  <ion-icon
+                    name="chatbubbles-outline"
+                    class="nav_icon"
+                  ></ion-icon>
+                  <span class="nav_name" style={{ fontSize: 16 }}>
+                    Resources
+                  </span>
+                </a>
+              )}
+            </li>
+          </ul>
+        </nav>
+      </div>
 
+      <img
+        src={user_icon}
+        alt="bell"
+        style={{
+          position: "absolute",
+          top: "4%",
+          left: "95%",
+          width: "30px",
+          height: "30px",
+        }}
+      />
+      <img
+        src={bell_icon}
+        alt="bell"
+        style={{
+          position: "absolute",
+          top: "4%",
+          left: "91%",
+          width: "30px",
+          height: "30px",
+        }}
+      />
+
+      <img
+        src={message_icon}
+        alt="bell"
+        style={{
+          position: "absolute",
+          top: "3.5%",
+          left: "87%",
+          width: "40px",
+          height: "40px",
+        }}
+      />
+    </div>
+  );
 }
 
 export default HrDashboard;

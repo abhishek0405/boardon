@@ -13,6 +13,7 @@ const client = require("twilio")(accountSid, authToken);
 const mongoose = require("mongoose");
 const transporter = nodemailer.createTransport({
   service: "gmail",
+  pool: true,
 
   auth: {
     user: process.env.EMAIL,
@@ -29,8 +30,9 @@ sendCredentailsToUser = async (employee, req) => {
   const company = req.userData.name;
   const firstName = employee.firstname;
   const lastName = employee.lastname;
-  const phone = employee.Phone;
+  const phone = employee.phone;
   const domain = req.userData.domain;
+  const dob = employee.dob;
   const cid = req.userData.cid;
   const newEmail = firstName + "." + lastName + "@" + domain;
 
@@ -74,7 +76,7 @@ sendCredentailsToUser = async (employee, req) => {
                 cid: cid,
                 eid: eid,
                 name: firstName + " " + lastName,
-                dob: "02/11/2001",
+                dob: dob,
                 phone: phone,
                 email: receiver,
                 username: newEmail,
@@ -170,19 +172,12 @@ generateCredentialsFromExcel = (req, res) => {
     const employeeList = result[sheetName];
 
     const updatedEmployeeList = employeeList.map(
-      ({
-        A: firstname,
-        B: lastname,
-        C: email,
-        D: company,
-        E: Phone,
-        ...rest
-      }) => ({
+      ({ A: firstname, B: lastname, C: dob, D: email, E: phone, ...rest }) => ({
         firstname,
         lastname,
+        dob,
         email,
-        company,
-        Phone,
+        phone,
         ...rest,
       })
     );
