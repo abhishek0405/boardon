@@ -4,9 +4,10 @@ const multer = require("multer");
 const config = require("../../config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 const {
-  generateCredentials,
   generateCredentialsFromExcel,
 } = require("../controllers/credController");
+
+const isCompanyLoggedIn = require("../middleware/isCompanyLoggedIn");
 
 const storageEngine = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -40,12 +41,11 @@ function validate(req, res, next) {
   next();
 }
 
-router.post("/generate", generateCredentials);
-
 router.post(
   "/generateFromSheet",
   upload.single("hireSheet"),
   validate,
+  isCompanyLoggedIn,
   generateCredentialsFromExcel
 );
 
