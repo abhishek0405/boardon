@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const config = require("../config")[process.env.NODE_ENV || "development"];
+const config = require("./config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 require("dotenv").config();
-const connectDB = require("../config/db");
+const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -16,7 +16,7 @@ app.use((req, res, next) => {
   return next();
 });
 app.use(cookieParser());
-const credRoutes = require("./routes/credRoutes");
+const credRoutes = require("./api/routes/credRoutes");
 app.use("/cred", credRoutes);
 
 module.exports = app;
