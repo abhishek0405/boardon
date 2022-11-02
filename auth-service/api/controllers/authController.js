@@ -36,7 +36,10 @@ const userLoginController = (req, res) => {
 
           res.cookie("authToken", token, {
             domain: domain,
+            path: "/",
           });
+
+          // res.setHeader("Set-Cookie", [`authToken=${token};`]);
 
           res.json({
             status: "authenticated",
@@ -120,7 +123,7 @@ const companyLoginController = (req, res) => {
             }
           );
 
-          res.cookie("authToken", token, { domain: domain });
+          res.cookie("authToken", token, { domain: domain, path: "/" });
           res.json({
             status: "authenticated",
             token: token,
