@@ -8,7 +8,8 @@ const cookieParser = require("cookie-parser");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const cors = require("cors");
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+const host = process.env.FRONTEND || "http://localhost:3000";
+app.use(cors({ credentials: true, origin: host }));
 connectDB();
 
 app.use((req, res, next) => {
