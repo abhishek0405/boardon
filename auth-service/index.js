@@ -7,7 +7,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const host = process.env.FRONTEND || "http://localhost:3000";
 app.use(cors({ credentials: true, origin: host }));
-
+app.set("trust proxy", 1);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const authRoutes = require("./api/routes/authRoute");
