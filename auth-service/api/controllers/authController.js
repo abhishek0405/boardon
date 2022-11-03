@@ -34,12 +34,15 @@ const userLoginController = (req, res) => {
             }
           );
 
-          res.cookie("authToken", token, {
-            domain: domain,
-            path: "/",
-          });
+          // res.cookie("authToken", token, {
+          //   domain: domain,
+          //   path: "/",
+          //   secure: true,
+          // });
 
-          // res.setHeader("Set-Cookie", [`authToken=${token};`]);
+          res.setHeader("Set-Cookie", [
+            `authToken=${token};Secure;SameSite=None`,
+          ]);
 
           res.json({
             status: "authenticated",
@@ -123,7 +126,10 @@ const companyLoginController = (req, res) => {
             }
           );
 
-          res.cookie("authToken", token, { domain: domain, path: "/" });
+          // res.cookie("authToken", token, { domain: domain, path: "/" });
+          res.setHeader("Set-Cookie", [
+            `authToken=${token};Secure;SameSite=None`,
+          ]);
           res.json({
             status: "authenticated",
             token: token,
