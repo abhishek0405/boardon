@@ -25,6 +25,15 @@ To stop : brew services stop mongodb-community@5.0
 
 app.use((req, res, next) => {
   log.debug(`${req.method}: ${req.url}`);
+  // res.header("Access-Control-Allow-Credentials", true);
+  // res.header(
+  //   "Access-Control-Allow-Methods",
+  //   "GET,PUT,POST,DELETE,UPDATE,OPTIONS"
+  // );
+  // res.header(
+  //   "Access-Control-Allow-Headers",
+  //   "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
+  // );
   return next();
 });
 app.use(cookieParser());

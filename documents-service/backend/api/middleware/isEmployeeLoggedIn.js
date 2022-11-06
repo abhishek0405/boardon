@@ -2,12 +2,13 @@ const axios = require("axios");
 const authUrl = process.env.AUTH_SERVICE || "http://localhost:3002";
 const isLoggedIn = async (req, res, next) => {
   try {
-    const authToken = req.cookies.authToken;
+    const authToken = req.headers.authorization.split(" ")[1];
+    console.log(authToken);
     //console.log(req.cookies)
     //console.log(authToken);
     const response = await axios.get(`${authUrl}/auth/user/isLoggedIn`, {
       headers: {
-        Cookie: `authToken=${authToken};`,
+        Authorization: `Bearer ${authToken}`,
       },
     });
     //console.log(response.data);

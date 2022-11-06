@@ -40,6 +40,7 @@ function EmpPolls() {
     //console.log(window.location.pathname)
     fetch("http://localhost:3005/emp/viewPolls", {
       credentials: "include",
+      headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
     })
       .then(
         (response) => {
