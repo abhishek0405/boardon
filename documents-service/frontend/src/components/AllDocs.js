@@ -7,6 +7,7 @@ function AllDocs() {
 
   useEffect(() => {
     fetch("http://localhost:5000/hr/getDocs", {
+      headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
       credentials: "include",
     })
       .then(

@@ -69,6 +69,7 @@ const GenerateCredentials = () => {
       method: "post",
       body: formData,
       credentials: "include",
+      headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
     });
 
     openModalOne();

@@ -29,6 +29,9 @@ const Result = () => {
         `http://localhost:3001/documentation/search?searchQuery=${searchQuery}`,
         {
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
       );
       const jsonData = await responseData.json();

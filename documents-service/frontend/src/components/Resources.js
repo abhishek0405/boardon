@@ -26,6 +26,9 @@ const Resources = () => {
         "http://localhost:3001/documentation/search/all",
         {
           credentials: "include",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         }
       );
       const jsonData = await responseData.json();

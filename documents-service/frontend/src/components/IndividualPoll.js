@@ -98,6 +98,9 @@ function IndividualPoll() {
     axios
       .post("http://localhost:3005/hr/addQuestion", ques, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       })
       .then((res) => {
         console.log(res.data);
@@ -120,6 +123,9 @@ function IndividualPoll() {
     axios
       .post("http://localhost:3005/hr/postPoll", p, {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       })
       .then((res) => {
         const data = res.data;
@@ -139,6 +145,7 @@ function IndividualPoll() {
     var url = "http://localhost:3005" + window.location.pathname.toString();
     fetch(url, {
       credentials: "include",
+      headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
     })
       .then(
         (response) => {
@@ -165,6 +172,9 @@ function IndividualPoll() {
     axios
       .delete("http://localhost:3002/auth/logout", {
         withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
       })
       .then((res) => {
         console.log(res.data);

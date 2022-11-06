@@ -34,12 +34,12 @@ const userLoginController = (req, res) => {
             }
           );
 
-          res.cookie("authToken", token, {
-            domain: domain,
-            path: "/",
-            secure: true,
-            sameSite: "none",
-          });
+          // res.cookie("authToken", token, {
+          //   domain: domain,
+          //   path: "/",
+          //   secure: true,
+          //   sameSite: "none",
+          // });
 
           // res.setHeader("Set-Cookie", [
           //   `authToken=${token};Secure;SameSite=None`,
@@ -50,11 +50,11 @@ const userLoginController = (req, res) => {
             token: token,
           });
         } else {
-          res.clearCookie("authToken");
+          // res.clearCookie("authToken");
           return res.json({ status: "error", error: "Invalid Password" });
         }
       } else {
-        res.clearCookie("authToken");
+        // res.clearCookie("authToken");
         return res.json({ status: "error", error: "Invalid username" });
       }
     })
@@ -127,12 +127,12 @@ const companyLoginController = (req, res) => {
             }
           );
 
-          res.cookie("authToken", token, {
-            domain: domain,
-            path: "/",
-            secure: true,
-            sameSite: "none",
-          });
+          // res.cookie("authToken", token, {
+          //   domain: domain,
+          //   path: "/",
+          //   // secure: true,
+          //   // sameSite: "none",
+          // });
           // res.setHeader("Set-Cookie", [
           //   `authToken=${token};Secure;SameSite=None`,
           // ]);
@@ -141,11 +141,11 @@ const companyLoginController = (req, res) => {
             token: token,
           });
         } else {
-          res.clearCookie("authToken");
+          // res.clearCookie("authToken");
           return res.json({ status: "error", error: "Invalid Password" });
         }
       } else {
-        res.clearCookie("authToken");
+        // res.clearCookie("authToken");
         return res.json({ status: "error", error: "Invalid username" });
       }
     })

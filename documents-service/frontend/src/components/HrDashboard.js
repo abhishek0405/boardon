@@ -58,17 +58,22 @@ function HrDashboard() {
 
   const handleClick = async (e) => {
     console.log("hellp");
-    axios
-      .delete("http://localhost:3002/auth/logout", {
-        withCredentials: true,
-      })
-      .then((res) => {
-        console.log(res.data);
-        if (res.data.status === "success") {
-          navigate("/");
-        }
-      })
-      .catch((err) => console.log(err.response.data));
+    localStorage.removeItem("authToken");
+    navigate("/");
+    // axios
+    //   .delete("http://localhost:3002/auth/logout", {
+    //     headers: {
+    //       Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+    //     },
+    //     withCredentials: true,
+    //   })
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     if (res.data.status === "success") {
+    //       navigate("/");
+    //     }
+    //   })
+    //   .catch((err) => console.log(err.response.data));
   };
 
   return (
