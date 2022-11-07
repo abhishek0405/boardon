@@ -1,9 +1,9 @@
 const express = require("express");
 const app = express();
-const config = require("../config")[process.env.NODE_ENV || "development"];
+const config = require("./config")[process.env.NODE_ENV || "development"];
 const log = config.log();
 require("dotenv").config();
-const connectDB = require("../config/db");
+const connectDB = require("./config/db");
 const cookieParser = require("cookie-parser");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,8 +24,8 @@ To stop : brew services stop mongodb-community@5.0
 
 */
 
-const uploadRoutes = require("../api/routes/docUploadRoutes");
-const searchRoutes = require("../api/routes/searchRoutes");
+const uploadRoutes = require("./api/routes/docUploadRoutes");
+const searchRoutes = require("./api/routes/searchRoutes");
 app.use(cookieParser());
 app.use((req, res, next) => {
   log.debug(`${req.method}: ${req.url}`);

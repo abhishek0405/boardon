@@ -4,9 +4,19 @@ const axios = require("axios").default;
 const Document = require("../models/document");
 const esUrl = process.env.ELASTIC_SEARCH_URL;
 const { Client } = require("@elastic/elasticsearch");
+// const client = new Client({
+//   node: esUrl,
+// });
 const client = new Client({
-  node: esUrl,
+  cloud: {
+    id: process.env.CLOUD_ID,
+  },
+  auth: {
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+  },
 });
+const index = process.env.INDEX;
 const searchDocumentationController = async (req, res) => {
   log.info(req.userData);
   const companyID = req.userData.cid;
@@ -14,7 +24,7 @@ const searchDocumentationController = async (req, res) => {
   const searchQuery = req.query.searchQuery;
   log.info("Search query is ", searchQuery);
   const result = await client.search({
-    index: "documents",
+    index: index,
 
     query: {
       bool: {
@@ -42,7 +52,7 @@ const searchDocumentationController = async (req, res) => {
 const suggestionController = async (req, res) => {
   const searchQuery = req.query.searchQuery;
   const response = await client.search({
-    index: "documents",
+    index: index,
     body: {
       suggest: {
         text: searchQuery,
@@ -94,7 +104,7 @@ const suggestionController = async (req, res) => {
 const searchAllController = async (req, res) => {
   const companyID = req.userData.cid;
   const result = await client.search({
-    index: "documents",
+    index: index,
     size: 100,
     query: {
       bool: {
@@ -113,7 +123,7 @@ const searchDocumentByIdController = async (req, res) => {
   const id = req.params.id;
 
   const result = await client.search({
-    index: "documents",
+    index: index,
 
     query: {
       bool: {

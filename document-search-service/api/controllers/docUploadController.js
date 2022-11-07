@@ -4,9 +4,20 @@ const axios = require("axios").default;
 const Document = require("../models/document");
 const esUrl = process.env.ELASTIC_SEARCH_URL;
 const { Client } = require("@elastic/elasticsearch");
+// const client = new Client({
+//   node: esUrl,
+
+// });
 const client = new Client({
-  node: esUrl,
+  cloud: {
+    id: process.env.CLOUD_ID,
+  },
+  auth: {
+    username: process.env.USERNAME,
+    password: process.env.PASSWORD,
+  },
 });
+const index = process.env.INDEX;
 const uploadDocumentation = async (req, res) => {
   log.info("Uploading Documentation");
 
@@ -18,7 +29,7 @@ const uploadDocumentation = async (req, res) => {
   };
   log.info(documentObj);
   await client.index({
-    index: "documents",
+    index: index,
     document: documentObj,
   });
   log.info("Inserted");
