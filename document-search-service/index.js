@@ -9,7 +9,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 connectDB();
 const cors = require("cors");
-app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+const host = process.env.FRONTEND || "http://localhost:3000";
+app.use(cors({ credentials: true, origin: host }));
 // const { Client } = require("@elastic/elasticsearch");
 // const client = new Client({
 //   node: "http://localhost:9200",
